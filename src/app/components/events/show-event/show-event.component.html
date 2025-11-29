@@ -1,0 +1,60 @@
+<mat-dialog-content>
+  <mat-card appearance="outlined">
+    <mat-card-header class="center-title">
+      <mat-card-title>{{ eventSelected?.name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Creado por:</strong> {{ eventSelected?.userAdd?.name }} {{ eventSelected?.userAdd?.lastname }}</p>
+      <p><strong>Descripción:</strong> {{ eventSelected?.description }}</p>
+      <p><strong>Lugar:</strong> {{ eventSelected?.place }}</p>
+      <p><strong>Hora de inicio:</strong> {{ getFormattedTime(eventSelected?.starttime) }}</p>
+      <p><strong>Hora de fin:</strong> {{ getFormattedTime(eventSelected?.endtime) }}</p>
+      <p><strong>Dirección:</strong> {{ eventSelected?.address }}</p>
+      <p><strong>Ubicación:</strong>
+      @if (eventSelected?.location?.lat && eventSelected?.location?.lng) {
+        <a
+          [href]="'https://www.google.com/maps?q=' + eventSelected.location.lat + ',' + eventSelected.location.lng"
+          target="_blank">
+          Ver en el mapa
+        </a>
+      }
+    </p>
+    <!-- Lista de invitados -->
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title><strong>Invitados</strong></mat-panel-title>
+        </mat-expansion-panel-header>
+        @if (eventSelected?.emails?.length > 0) {
+          <div>
+            <ul>
+              @for (guest of eventSelected?.emails; track guest) {
+                <li>
+                  {{ guest.name }} - <a href="mailto:{{ guest.email }}">{{ guest.email }}</a>
+                  @if (guest.emailSent) {
+                    <small class="email-sent">&nbsp;(Enviado)</small>
+                  }
+                  @if (!guest.emailSent) {
+                    <small class="email-not-sent">&nbsp;(No enviado)</small>
+                  }
+                </li>
+                }<br>
+              </ul>
+            </div>
+          } @else {
+            <p>No hay invitados.</p>
+          }
+        </mat-expansion-panel>
+      </mat-accordion><br>
+      <!--Preview del mapa-->
+      @if (mapUrl) {
+        <iframe [src]="mapUrl" width="500" height="300" style="border:0;" allowfullscreen
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      }
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-flat-button color="warn" (click)="onClose()">Cerrar</button>
+    </mat-card-actions>
+  </mat-card>
+</mat-dialog-content>

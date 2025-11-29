@@ -1,0 +1,133 @@
+<div class="main">
+  <app-sidebar></app-sidebar>
+  <div class="container">
+    <h1 align="center"> Traspasos </h1>
+    <mat-tab-group>
+      <mat-tab label="Mis solicitudes">
+        <div>
+          <h3 align="center"> Mis solicitudes </h3>
+          <p align="center" *ngIf="user?.role === 'cocinero' || user?.role === 'encargado de sucursal'">
+            {{sucursal?.name}} </p>
+          <div id="zona" class="grid-3-col"
+            *ngIf="user?.role === 'gerente' || user?.role === 'supervisor' || user?.role === 'auxiliar de zona' || user?.role === 'rh de zona' || user?.role === 'administrativo' || user?.role === 'super administrativo'">
+            <mat-form-field>
+              <mat-label>Selecciona zona</mat-label>
+              <mat-select [disabled]="!isSuperAdmin" [(ngModel)]="selectedZone"
+                (selectionChange)="getSucursales(selectedZone._id)">
+                <mat-option *ngFor="let zona of zonas" [value]="zona"> {{zona.name}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="selectedZone" class="center-elementsX">
+              <mat-select [(ngModel)]="selectedSuc">
+                <mat-option *ngFor="let s of sucursales" [value]="s"> {{s.name}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="center-elementsX">
+              <button (click)="traerSolicitudes()" [disabled]="selectedZone === undefined" mat-raised-button
+                color="warn"> Buscar
+              </button>
+            </div>
+          </div>
+          <table *ngIf="traspasos.length > 0; else sinRegistros" mat-table [dataSource]="traspasos" class="mat-elevation-z8">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Nombre </th>
+              <td mat-cell *matCellDef="let element"> {{element.product?.name}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="qty">
+              <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+              <td mat-cell *matCellDef="let element"> {{element.quantity}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="accept">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-raised-button color="primary" (click)="acceptTraspaso(element)" > Aceptar </button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="reject">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element"> 
+                  <button mat-raised-button color="warn" (click)="rejectTraspaso(element)" > Rechazar </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <ng-template #sinRegistros>
+            <p *ngIf="searched">No existen registros de traspasos en este momento</p>
+          </ng-template>
+        </div>
+      </mat-tab>
+      <mat-tab label="Historial">
+          <div>
+              <h3 align="center"> Traspasos a mi sucursal </h3>
+              <p align="center" *ngIf="user?.role === 'cocinero' || user?.role === 'encargado de sucursal'">
+                {{sucursal?.name}} </p>
+              <div id="zona" class="grid-3-col"
+                *ngIf="user?.role === 'gerente' || user?.role === 'supervisor' || user?.role === 'auxiliar de zona' || user?.role === 'rh de zona' || user?.role === 'administrativo' || user?.role === 'super administrativo'">
+                <mat-form-field>
+                  <mat-label>Selecciona zona</mat-label>
+                  <mat-select [disabled]="!isSuperAdmin" [(ngModel)]="selectedZone"
+                    (selectionChange)="getSucursales(selectedZone._id)">
+                    <mat-option *ngFor="let zona of zonas" [value]="zona"> {{zona.name}} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="selectedZone" class="center-elementsX">
+                  <mat-select [(ngModel)]="selectedSuc">
+                    <mat-option *ngFor="let s of sucursales" [value]="s"> {{s.name}} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="center-elementsX">
+                  <button (click)="traerHistorial()" [disabled]="selectedZone === undefined" mat-raised-button
+                    color="warn"> Buscar
+                  </button>
+                </div>
+              </div>
+              <mat-form-field class="w-100">
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtro"> 
+              </mat-form-field>
+              <table *ngIf="historial.length > 0; else sinRegistros" mat-table [dataSource]="historialDataSource" class="mat-elevation-z8">
+                <ng-container matColumnDef="createdAt">
+                  <th mat-header-cell *matHeaderCellDef> Fecha de aplicación </th>
+                  <td mat-cell *matCellDef="let element"> {{element.createdAt | date:'short'}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="product">
+                  <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                  <td mat-cell *matCellDef="let element"> {{element.product?.name}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="desde">
+                  <th mat-header-cell *matHeaderCellDef> Origen </th>
+                  <td mat-cell *matCellDef="let element"> {{element.desde?.name}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                  <td mat-cell *matCellDef="let element"> {{element.quantity}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let element">
+                    <p> {{element.status === 1 ? 'Aceptado' : 'Rechazado'}} </p>
+                  </td>
+                </ng-container>
+                <!-- <ng-container matColumnDef="reject">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let element"> 
+                      <button mat-raised-button color="warn" (click)="rejectTraspaso(element)" > Rechazar </button>
+                  </td>
+                </ng-container> -->
+                <tr mat-header-row *matHeaderRowDef="historialColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: historialColumns;"></tr>
+              </table>
+              <ng-template #sinRegistros>
+                <p *ngIf="searched">No existen registros de traspasos en este momento</p>
+              </ng-template>
+            </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

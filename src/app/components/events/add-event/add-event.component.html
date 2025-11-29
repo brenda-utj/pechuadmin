@@ -1,0 +1,276 @@
+<!-- <pre>{{eventForm.value | json}}</pre> -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+  <!-- Botón Arrow atrás-->
+  <div style="display: flex; align-items: center;">
+    <button mat-icon-button (click)="goBack()" aria-label="Volver atrás" style="color: black;">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span style="color: black; font-size: 16px; margin-left: 4px;">Atrás</span>
+  </div>
+  <h3 mat-dialog-title style="margin: 0; position: absolute; left: 50%; transform: translateX(-50%);">
+    {{ editMode ? 'Editar Evento' : 'Agregar Evento' }}
+  </h3>
+</div>
+
+<div class="container" [ngClass]="{'overflow' : editMode}">
+  <div style="color: red; font-size: 16px; margin-bottom: 16px;">
+    Todos los campos marcados con * son obligatorios
+  </div>
+  <mat-card style="padding: 20px;" appearance="outlined">
+    @if (eventForm) {
+      <form [formGroup]="eventForm" (ngSubmit)="addEvent()">
+        <div class="row mb-3">
+          <div class="col-12">
+            <h3>
+              <strong>
+                Información General
+              </strong>
+            </h3>
+          </div>
+        </div>
+        <!-- Primera row: Nombre del evento y descripción -->
+        <div class="row">
+          <div class="col-4">
+            <strong style="text-align: left; display: block;">Nombre del Evento *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <input matInput formControlName="name" placeholder="Nombre del Evento">
+              @if (eventForm.get('name').hasError('required')) {
+                <mat-error>El nombre es requerido</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-8">
+            <strong style="text-align: left; display: block;">Descripción *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <input matInput formControlName="description" placeholder="Descripción">
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- Segunda row: Fecha y hora dek evento-->
+        <div class="row">
+          <div class="col-4">
+            <strong style="text-align: left; display: block;">Fecha *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <input matInput [matDatepicker]="picker" (keypress)="numericOnly($event)" formControlName="date"
+                placeholder="Selecciona la fecha">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                @if (eventForm.get('date').errors) {
+                  <mat-error>
+                    @if (eventForm.get('date').hasError('required') && eventForm.get('date').touched) {
+                      La fecha es requerida.
+                    }
+                    @if (eventForm.get('date').hasError('eventDateInvalid') && eventForm.get('date').touched) {
+                      @if (!editMode) {
+                        {{ eventForm.get('date').errors.eventDateInvalid
+                        }}
+                      }
+                      @if (editMode) {
+                        La fecha del evento caducó. Registra una nueva
+                        fecha.
+                      }
+                    }
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <!-- Hora de inicio-->
+            <div class="col-4">
+              <strong style="text-align: left; display: block;">Hora de inicio*</strong>
+                <material-timepicker 
+                  color="primary" 
+                  appearance="outline" 
+                  label="Hora de inicio"
+                  [userTime]="exportTime" 
+                  (change)="onStartTimeChange($event)" 
+                  revertLabel="Atrás" 
+                  submitLabel="Ok">
+                </material-timepicker>
+            </div>
+            <!-- Hora de fin-->
+            <div class="col-4">
+              <strong style="text-align: left; display: block;">Hora de fin*</strong>
+                <material-timepicker 
+                  color="primary" 
+                  appearance="outline" 
+                  label="Hora de fin"
+                  [userTime]="exportEndTime" 
+                  (change)="onEndTimeChange($event)" 
+                  revertLabel="Atrás" 
+                  submitLabel="Ok">
+                </material-timepicker>
+            </div>
+          </div>
+          <!-- Tercera row: Location (mapa) -->
+          <div class="row">
+              <!--Lugar del evento-->
+            <div class="col-4">
+              <strong style="text-align: left; display: block;">Lugar *</strong>
+              <mat-form-field class="w-100" appearance="outline">
+                <input matInput formControlName="place" placeholder="Lugar del evento">
+                @if (eventForm.get('place').hasError('required')) {
+                  <mat-error>El lugar es requerido</mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <!--Dirección del evento-->
+            <div class="col-8">
+              <strong style="text-align: left; display: block;">Dirección *</strong>
+              <app-address-search [addressSearch]="eventForm.get('address').value"
+              (locationSelected)="onAddressSelected($event)"></app-address-search>
+            </div>
+            <div class="col-10 offset-1">
+              <app-map 
+                [lat]="eventForm.get('location')?.value?.lat" 
+                [lng]="eventForm.get('location')?.value?.lng"
+                [isEdition]="editMode" 
+                (markerChanged)="onMapMarkerChanged($event)">
+              </app-map>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12">
+              <mat-divider></mat-divider> <br>
+              <h3>Archivos Adjuntos</h3>
+            </div>
+          </div>
+          <!-- Para mostrar los archivos ya subidos (Attached) -->
+          <div class="row my-4">
+            @for (attached of eventForm.get('attached').value; track attached; let i = $index) {
+              <div class="col-2 attached-card m-2"
+                >
+                <div class="w-100 text-truncate" [title]="attached.fileName">
+                  {{attached.fileName}}
+                </div>
+                <div class="w-100 my-3 preview-container">
+                  @if (isImage(attached.fileName)) {
+                    <div class="preview-image" [style.backgroundImage]="'url(' + attached.url + ')'"></div>
+                  } @else {
+                    <img [src]="getFileIcon(attached.fileName)" class="img-fluid preview-icon"
+                      alt="File Preview">
+                    }
+                  </div>
+                  <div class="w-100 text-center">
+                    <button type="button" mat-raised-button color="warn"
+                    (click)="removeAttached(i)">Eliminar</button>
+                  </div>
+                </div>
+              }
+            </div>
+            <!-- Cuarta row: Archivos adjuntos (attached) -->
+            <div formArrayName="files" class="row">
+              @for (file of files.controls; track file; let i = $index) {
+                <div class="col-3 mb-3">
+                  <div class="doc gray">
+                    <div class="w-100">
+                      Archivo adjunto:
+                    </div>
+                    @if (file.value) {
+                      <div>
+                        <label class="custom-file-upload">
+                          {{ file.value.name }}
+                        </label>
+                        <br><br>
+                        <button type="button" mat-raised-button color="warn" (click)="removeFile(i)">Eliminar
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+              <!-- Contenedor para agregar un nuevo archivo -->
+              <div class="doc size19 gray">
+                <div class="w-100 d-block">
+                  Adjuntar archivo:
+                </div>
+                <div class="w-100 d-block">
+                  <label for="file-upload" class="custom-file-upload">
+                    <img src='./assets/img/add-image.png' alt="Agregar archivo">
+                  </label>
+                  <input #imageInput id="file-upload" (change)="addFile($event.target.files[0])" type="file"
+                    accept=".jpeg, .jpg, .png, .pdf, .doc, .docx, .xls, .xlsx" style="display: none;" />
+                    @if (!imageInput.files?.length) {
+                      <div class="centered-message">
+                        No se eligió ningún archivo
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-12">
+                  <mat-divider></mat-divider> <br>
+                  <h3>Lista de Invitados</h3>
+                </div>
+              </div>
+              <!-- Quinta row: Nombre y correo electrónico -->
+              <div class="row mt-5">
+                <div formArrayName="emails" class="col-12">
+                  @for (email of emails.controls; track email; let i = $index) {
+                    <div [formGroupName]="i"
+                      class="row align-items-center mb-2">
+                      <!-- Campo de nombre -->
+                      <div class="col-4">
+                        <strong style="text-align: left; display: block;">Nombre *</strong>
+                        <mat-form-field class="w-100" appearance="outline">
+                          <input matInput formControlName="name" placeholder="Nombre del contacto">
+                          @if (email.get('name').hasError('required')) {
+                            <mat-error>El nombre del contacto es
+                            requerido</mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                      <!-- Campo de correo -->
+                      <div class="col-4">
+                        <strong style="text-align: left; display: block;">Correo Electrónico *</strong>
+                        <mat-form-field class="w-100" appearance="outline">
+                          <input matInput formControlName="email" placeholder="Correo Electrónico">
+                          @if (email.get('email').hasError('required')) {
+                            <mat-error>El correo electrónico es
+                            requerido</mat-error>
+                          }
+                          @if (email.get('email').hasError('email')) {
+                            <mat-error>Ingresa un correo
+                            válido</mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                      <!-- Botón de eliminar -->
+                      <div class="col-4 d-flex justify-content-start align-items-center gap-2">
+                        @if (emails.length > 1 && i > 0) {
+                          <button mat-icon-button color="warn" type="button"
+                            (click)="removeEmail(i)">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 text-start">
+                  <a mat-button color="primary" role="button" (click)="addEmail()"
+                    style="cursor: pointer; text-decoration: underline;">
+                    + Agregar otro invitado
+                  </a>
+                </div>
+              </div>
+              <!-- Botones -->
+              <mat-dialog-actions align="end" style="margin-top: 16px; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: flex-end; gap: 16px;">
+                  <button mat-flat-button color="warn" type="button" (click)="goBack()">Cancelar</button>
+                  <button mat-flat-button color="primary" type="submit" [disabled]="!eventForm.valid || isLoading">
+                    @if (isLoading) {
+                      <span class="spinner-container mr-5">
+                        <mat-spinner mode="indeterminate" [diameter]="20"></mat-spinner>
+                      </span>
+                    }
+                    {{isLoading? 'Guardando...' : 'Guardar'}}
+                  </button>
+                </div>
+              </mat-dialog-actions>
+            </form>
+          }
+        </mat-card>
+      </div>

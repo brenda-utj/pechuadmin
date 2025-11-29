@@ -1,0 +1,18 @@
+<mat-form-field class="w-100" appearance="outline">
+  <input matInput [(ngModel)]="query" (input)="searchAddress()" placeholder="Buscar dirección..."
+    [matAutocomplete]="auto" />
+    @if (loading) {
+      <mat-progress-spinner matSuffix mode="indeterminate" diameter="20">
+      </mat-progress-spinner>
+    }
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectAddress($event.option.value)">
+      @for (address of filteredSuggestions | async; track address) {
+        <mat-option [value]="address">
+          {{ address.value }} {{address.subtext}}
+        </mat-option>
+      }
+    </mat-autocomplete>
+    @if (loading) {
+      <mat-hint>Buscando direcciones...</mat-hint>
+    }
+  </mat-form-field>

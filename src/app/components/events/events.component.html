@@ -1,0 +1,96 @@
+<div style="text-align: right;">
+  <button mat-flat-button color="primary" (click)="navigateToAddEvent()">
+    + Agregar evento
+  </button>
+</div>
+<br>
+  <mat-card appearance="outlined" style="text-align: center;">
+    <mat-card-content>
+      <div class="div-search">
+        <mat-form-field class="filter-search" appearance="outline">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput 
+          placeholder="Buscar por nombre..."
+          [(ngModel)]="filtroTexto" 
+          (input)="applyFilter()" />
+        </mat-form-field>
+      </div>
+      @if (dataSource && dataSource.filteredData && dataSource.filteredData.length) {
+        <div class="mat-elevation-z8" style="text-align-last: center">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table">
+            <!-- Event Name -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Nombre</th>
+              <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+            </ng-container>
+            <!-- Descripction -->
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Descripción</th>
+              <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+            </ng-container>
+            <!-- Date -->
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Fecha</th>
+              <td mat-cell *matCellDef="let element">{{ element.date | date: 'dd/MM/yyyy' }}</td>
+            </ng-container>
+            <!-- Place -->
+            <ng-container matColumnDef="place">
+              <th mat-header-cell *matHeaderCellDef>Lugar</th>
+              <td mat-cell *matCellDef="let element">{{ element.place }}</td>
+            </ng-container>
+            <!-- starttime -->
+            <ng-container matColumnDef="starttime">
+              <th mat-header-cell *matHeaderCellDef>Hora de inicio</th>
+              <td mat-cell *matCellDef="let element">{{getFormattedTime(element.starttime)}}</td>
+            </ng-container>
+            <!-- endtime -->
+             <ng-container matColumnDef="endtime">
+              <th mat-header-cell *matHeaderCellDef>Hora de fin</th>
+              <td mat-cell *matCellDef="let element">{{getFormattedTime(element.endtime)}}</td>
+            </ng-container>
+            <!-- status -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let element">
+                <span
+                  [ngClass]="{
+                    'badge-activo': element.status === 'active',
+                    'badge-baja': element.status === 'canceled'
+                  }"
+                >
+                  {{ element.status === 'active' ? 'Activo' : 'Cancelado' }}
+                </span>
+              </td>
+            </ng-container>
+            <!-- Actions -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef class="mat-column-actions">Acciones</th>
+              <td mat-cell *matCellDef="let element" class="mat-column-actions">
+                <button mat-icon-button (click)="viewDetails(element)" class="view" matTooltip="Mostrar detalles">
+                  <mat-icon class="pointer custom-blue">visibility</mat-icon>
+                </button>
+                <button mat-icon-button (click)="navigateToEditEvent(element._id)" class="edit" matTooltip="Editar evento">
+                  <mat-icon class="pointer black-icon">edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="cancelEvent(element._id)" class="cancel" matTooltip="Cancelar evento">
+                  <mat-icon class="pointer cancel">cancel</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteEvent(element._id)" class="delete" matTooltip="Eliminar de la tabla">
+                  <mat-icon color="warn" class="pointer">delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <!-- Definición de filas de la tabla -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+          <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+      } @else {
+        <div class="w-100"><strong>No hay eventos registrados...</strong></div>
+      }
+      <!-- Text Filter -->
+    </mat-card-content>
+  </mat-card>
+
+

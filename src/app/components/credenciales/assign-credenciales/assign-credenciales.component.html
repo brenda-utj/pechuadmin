@@ -1,0 +1,89 @@
+<mat-card appearance="outlined" class="mat-elevation-z8">
+  <mat-card-content>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
+      <mat-form-field class="filter-search" appearance="outline">
+        <mat-select [(ngModel)]="userSelected" (selectionChange)="changeEvent()">
+          <mat-option disabled="disabled">
+            <input matInput (input)="updateFilters()" autocomplete="off" placeholder="Filtrar..." [(ngModel)]="name">
+          </mat-option>
+          @for (user of users; track user) {
+            <mat-option [value]="user">
+              {{ user.name + ' ' + user.lastname }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" routerLink="/credenciales"><mat-icon>arrow_back</mat-icon></button>
+    </div>
+
+    @if (userSelected) {
+      <div style="margin-bottom: 1rem;">
+        <mat-checkbox [(ngModel)]="selectAll" (change)="toggleSelectAll($event)">
+          Seleccionar todos
+        </mat-checkbox>
+      </div>
+    }
+
+    <!-- Recorrer los módulos -->
+    @if (userSelected) {
+      @for (module of modules; track module) {
+        <mat-expansion-panel style="margin-bottom: 1rem;">
+          <mat-expansion-panel-header>
+            <span style="font-weight: bold;">{{ module.name }}</span>
+          </mat-expansion-panel-header>
+          <!-- Verificar si el módulo tiene credenciales -->
+          @if (credentialsByModule[module.name]) {
+            <div style="margin-bottom: 1rem;">
+              <mat-checkbox
+                [(ngModel)]="moduleSelection[module.name]"
+                (change)="toggleModuleSelection(module.name, $event)"
+                >
+                Seleccionar módulo
+              </mat-checkbox>
+            </div>
+            <!-- Mostrar credenciales sin submódulo -->
+            @if (credentialsByModule[module.name]['noSubmodule']) {
+              <p style="font-weight: bold;">Módulo principal</p>
+              <div class="credential-grid">
+                @for (credential of credentialsByModule[module.name]['noSubmodule']; track credential) {
+                  <mat-checkbox
+                    [(ngModel)]="permissions[module.name]['noSubmodule'][credential.name]"
+                    (change)="onCredentialChange(module.name, 'noSubmodule', $event)"
+                    name="permissions_{{credential.id}}"
+                    >
+                    {{ credential.name }}
+                  </mat-checkbox>
+                }
+              </div>
+            }
+            <!-- Iterar sobre submódulos y credenciales -->
+            @for (submoduleKey of getSubmodules(module.name); track submoduleKey) {
+              <hr />
+              <p style="font-weight: bold;">{{ submoduleKey }}</p>
+              <div class="credential-grid">
+                @for (credential of credentialsByModule[module.name][submoduleKey]; track credential) {
+                  <mat-checkbox
+                    [(ngModel)]="permissions[module.name][submoduleKey][credential.name]"
+                    (change)="onCredentialChange(module.name, submoduleKey, $event)"
+                    name="permissions_{{credential.id}}"
+                    >
+                    {{ credential.name }}
+                  </mat-checkbox>
+                }
+              </div>
+            }
+          }
+        </mat-expansion-panel>
+      }
+    }
+
+    <!-- Botón para guardar los permisos -->
+    @if (userSelected) {
+      <mat-card-actions style="display: flex; justify-content: space-between;">
+        <button mat-raised-button color="primary" (click)="savePermissions()">Guardar Permisos</button>
+        <button mat-raised-button style="background-color: #f44336; color: #ffff;"
+        routerLink="/credenciales">Cancelar</button>
+      </mat-card-actions>
+    }
+  </mat-card-content>
+</mat-card>

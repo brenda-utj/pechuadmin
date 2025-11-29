@@ -1,0 +1,118 @@
+.notification-tabs {
+  display: flex;
+  margin-bottom: 10px;
+
+  button {
+    padding: 6px 12px;
+    margin-right: 5px;
+    background-color: #ffffff; // Fondo blanco
+    border: 1px solid #3f51b5; // Borde azul oscuro
+    color: #3f51b5; // Texto azul oscuro
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #3f51b5; // Al pasar el ratón, relleno azul oscuro
+      color: #ffffff; // Texto blanco
+    }
+
+    &.active {
+      background-color: #5872ff; // Tab seleccionada: azul claro
+      color: #ffffff; // Texto blanco
+      border-color: #5872ff; // Borde acorde al color de fondo
+    }
+  }
+}
+
+// Contenedor con scroll
+.notification-list {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #ffffff; // Si deseas un fondo blanco
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+// Cada notificación
+.notification-item {
+  position: relative;
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin: 4px 0;
+  background-color: #ffffff;
+  color: #3f51b5; // Texto azul oscuro (opcional, puedes dejarlo en negro si prefieres)
+
+  // Si está no leída, le agregamos un circulito en el costado
+  &.unread::after {
+    content: "";
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    background-color: #3f51b5; // Punto azul oscuro
+    border-radius: 50%;
+  }
+}
+
+.button-9 {
+  appearance: button;
+  backface-visibility: hidden;
+  background-color: #3f51b5;
+  border-radius: 6px;
+  border-width: 0;
+  box-shadow: rgba(50, 50, 93, 0.1) 0 0 0 1px inset,
+    rgba(50, 50, 93, 0.1) 0 2px 5px 0, rgba(0, 0, 0, 0.07) 0 1px 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
+    Ubuntu, sans-serif;
+  font-size: 90%; // Levemente reducido
+  height: 36px; // Más bajo
+  line-height: 1.15;
+  margin: 8px 0 0;
+  outline: none;
+  overflow: hidden;
+  padding: 0 20px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  transform: translateZ(0);
+  transition: all 0.2s, box-shadow 0.08s ease-in;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+}
+
+.button-9:disabled {
+  cursor: default;
+}
+
+.button-9:focus {
+  box-shadow: rgba(50, 50, 93, 0.1) 0 0 0 1px inset,
+    rgba(50, 50, 93, 0.2) 0 6px 15px 0, rgba(0, 0, 0, 0.1) 0 2px 2px 0,
+    rgba(50, 151, 211, 0.3) 0 0 0 4px;
+}
+
+.row {
+  display: flex;
+  align-items: center; // Alinea verticalmente en el centro
+  gap: 8px; // Separación horizontal entre .col (ajusta según desees)
+  margin: 4px 0; // Separación vertical entre filas
+}
+
+.btn-cancel {
+    margin-left: 1rem;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    min-width: 64px;
+    line-height: 36px;
+    padding: 0 16px;
+    border-width: 0;
+    border-radius: 4px;
+    background-color: #f44336;
+    color: #ffff;
+  }

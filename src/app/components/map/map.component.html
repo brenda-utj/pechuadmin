@@ -1,0 +1,7 @@
+@if (showMap) {
+  <div style="height: 350px; z-index: 0;"
+    leaflet
+    [leafletOptions]="options"
+    (leafletMapReady)="onMapReady($event)">
+  </div>
+}

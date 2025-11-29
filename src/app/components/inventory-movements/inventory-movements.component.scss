@@ -1,0 +1,51 @@
+
+mat-form-field {
+    width: 100% !important;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .form-card {
+    min-width: 120px;
+    margin: 0 auto 20px auto;
+  }
+
+  .mat-mdc-radio-button {
+    display: block;
+    margin: 5px 0;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .col {
+    flex: 1;
+    margin-right: 20px;
+  }
+
+  .col:last-child {
+    margin-right: 0;
+  }
+
+
+  .text-align-right {
+    text-align: right;
+  }
+
+
+  .text-align-center {
+    text-align: center;
+  }
+
+  .total {
+    font-size: 3.5em;
+  }
+
+  table {
+    width: 100%;
+  }

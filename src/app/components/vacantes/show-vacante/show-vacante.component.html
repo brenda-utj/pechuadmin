@@ -1,0 +1,21 @@
+<mat-dialog-content>
+    <mat-card appearance="outlined">
+        <mat-card-header>
+        <mat-card-title>{{ vacanteSeleccionada?.puesto?.nombre }}</mat-card-title>
+        <mat-card-subtitle>  Estatus: {{ vacanteSeleccionada?.estatus == 1 ? 'Activa' : 'Inactiva' }}
+        </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+        <p><strong>Descripción:</strong> {{ vacanteSeleccionada?.descripcionVacante }}</p>
+        <p><strong>Salario:</strong> {{ vacanteSeleccionada?.salario | currency }}</p>
+        <p><strong>Zona:</strong> {{ vacanteSeleccionada?.zona?.name }}</p>
+        <p><strong>Dirección:</strong> {{ vacanteSeleccionada?.direccion }}</p>
+        <p><strong>Forma de trabajo:</strong> {{ vacanteSeleccionada?.formaTrabajo }}</p>
+        <p><strong>Estudios mínimos:</strong> {{ vacanteSeleccionada?.estudiosMinimos }}</p>
+        <p><strong>Fecha de contratación:</strong> {{ vacanteSeleccionada?.fechaContratacion | date: 'dd/MM/yyyy' }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-flat-button color="warn" (click)="onClose()">Cerrar</button>
+        </mat-card-actions>
+    </mat-card>
+</mat-dialog-content>  

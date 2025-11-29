@@ -1,0 +1,86 @@
+<div class="sidebar">
+  <img src="./assets/img/pechugon.svg" height="100px" width="100%" alt="">
+  <p class="username"> Hola {{user?.name}} </p>
+  <mat-list role="list" >
+    <mat-list-item class="pointer" role="listitem" [routerLink]="['../landing']" routerLinkActive="router-link-active">
+      <mat-icon>home</mat-icon> Inicio
+    </mat-list-item>
+    @if (user?.role !== 'cocinero' && user?.role !== 'encargado de sucursal') {
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../sucursal']" routerLinkActive="router-link-active">
+        <mat-icon>dashboard</mat-icon> Sucursal
+      </mat-list-item>
+    }
+    @if (user?.role !== 'cocinero') {
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../usuarios']" routerLinkActive="router-link-active">
+        <mat-icon>person</mat-icon> Usuarios
+      </mat-list-item>
+    }
+    @if (user?.role !== 'encargado de sucursal' && user?.role !== 'cocinero') {
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../categorias']" routerLinkActive="router-link-active">
+        <mat-icon>category</mat-icon> Categorias/Unidades
+      </mat-list-item>
+    }
+    @if (user?.role !== 'encargado de sucursal' && user?.role !== 'cocinero') {
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../materia-prima']" routerLinkActive="router-link-active">
+        <mat-icon>assignment_returned</mat-icon> Materias
+      </mat-list-item>
+    }
+    @if (user?.role !== 'encargado de sucursal' && user?.role !== 'cocinero') {
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../productos']" routerLinkActive="router-link-active">
+        <mat-icon>unarchive</mat-icon> Productos
+      </mat-list-item>
+    }
+    @if (user?.role === 'administrativo' || user?.role === 'super administrativo') {
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../zonas']" routerLinkActive="router-link-active">
+        <mat-icon>tab</mat-icon> Zonas</mat-list-item>
+      }
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../sucursales']" routerLinkActive="router-link-active">
+        <mat-icon>storefront</mat-icon> Traspasos
+      </mat-list-item>
+      <!-- <mat-list-item *ngIf="user?.role !== 'cocinero'" class="pointer" role="listitem" [routerLink]="['../ventas']" routerLinkActive="router-link-active">
+      <mat-icon>shopping_cart</mat-icon> Ventas
+    </mat-list-item> -->
+    @if (user?.role !== 'cocinero') {
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../reporte-ventas']" routerLinkActive="router-link-active">
+        <mat-icon>local_atm</mat-icon> Reporte de ventas
+      </mat-list-item>
+    }
+    @if (user?.role !== 'cocinero') {
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../analisis-ventas']" routerLinkActive="router-link-active">
+        <mat-icon>timeline</mat-icon> Analisis de ventas
+      </mat-list-item>
+    }
+    @if (user?.role !== 'cocinero') {
+      <mat-list-item class="pointer" role="listitem" [routerLink]="['../traspasos']" routerLinkActive="router-link-active">
+        <mat-icon>send</mat-icon> Historial de traspasos
+      </mat-list-item>
+    }
+    <!-- <mat-list-item *ngIf="user?.role !== 'encargado de sucursal' && user?.role !== 'cocinero'" class="pointer" role="listitem" [routerLink]="['../recurrentes']" routerLinkActive="router-link-active">
+    <mat-icon>attach_money</mat-icon> Gastos recurrentes
+  </mat-list-item> -->
+  @if (user?.role !== 'encargado de sucursal' && user?.role !== 'cocinero') {
+    <mat-list-item class="pointer" role="listitem" [routerLink]="['../cupones']" routerLinkActive="router-link-active">
+      <mat-icon>local_atm</mat-icon> Cupones
+    </mat-list-item>
+  }
+  @if (user?.role !== 'encargado de sucursal' && user?.role !== 'cocinero') {
+    <mat-list-item class="pointer" role="listitem" [routerLink]="['../movimientos']" routerLinkActive="router-link-active">
+      <mat-icon>autorenew</mat-icon> Movimientos
+    </mat-list-item>
+  }
+  @if (user?.role !== 'encargado de sucursal' && user?.role !== 'cocinero') {
+    <mat-list-item class="pointer" role="listitem" [routerLink]="['../cajas']" routerLinkActive="router-link-active">
+      <mat-icon>monetization_on</mat-icon> Movimientos de caja
+    </mat-list-item>
+  }
+  <mat-list-item class="" role="listitem">
+  </mat-list-item>
+  <mat-list-item class="pointer" role="listitem" (click)="logout()" >
+    <mat-icon>exit_to_app</mat-icon> logout
+  </mat-list-item>
+  <!-- <mat-list-item class="pointer" role="listitem" *ngIf="user?.role === 'super administrativo'" (click)="deleteAll()" >
+  <mat-icon>delete</mat-icon> Borar todo
+</mat-list-item> -->
+
+</mat-list>
+</div>

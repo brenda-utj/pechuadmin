@@ -1,0 +1,68 @@
+<h2>Notificaciones</h2>
+
+<!-- Contenedor de tabs -->
+<div class="notification-tabs">
+  <!-- Botón No leídos -->
+  <button [class.active]="filterType === 'unread'" (click)="setFilter('unread')">
+    No leídos
+  </button>
+
+  <!-- Botón Todos -->
+  <button [class.active]="filterType === 'all'" (click)="setFilter('all')">
+    Todos
+  </button>
+</div>
+
+<!-- Contenedor con scroll -->
+<div class="notification-list">
+  @for (notif of filteredNotifications; track notif) {
+    <div class="notification-item"
+      [ngClass]="{ 'unread': isNotRead(notif) }">
+      <!-- Título/tipo -->
+      <p><strong>Ticket:</strong> {{ notif.ticketId }}</p>
+      @if (notif.type === 'ticketEnRevision') {
+        <p>Ticket puesto en revisión</p>
+      }
+      @if (notif.type === 'statusChanged') {
+        <p>Se cambió el estatus del ticket a {{ notif.newStatus }}</p>
+      }
+      @if (notif.type === 'commentCreated') {
+        <p>Se agregó un nuevo comentario</p>
+      }
+      @if (notif.type === 'commentCreated') {
+        <p><strong>Mensaje:</strong> {{ notif.message }}</p>
+      }
+      <!-- <p><strong>Tipo:</strong> {{ notif.type }}</p> -->
+      <!-- Estado de lectura: dos botones en la misma fila -->
+      @if (notif.users) {
+        <!-- Itera usuarios: solo muestra los botones si coincide con el user actual -->
+        @for (u of notif.users; track u) {
+          <div class="row">
+            @if (u.userId === user._id) {
+              <!-- Columna 1: Marcar como leída (solo si !u.read) -->
+              <div class="col">
+                @if (!u.read) {
+                  <button mat-icon-button class="button-9" (click)="markAsRead(notif)">
+                    Marcar como leída
+                  </button>
+                }
+              </div>
+              <!-- Columna 2: Botón "Ver" (abre modal con AddTicket) -->
+              <div class="col">
+                <button mat-icon-button class="button-9" (click)="openTicketDialog(notif.ticketId)">
+                  Ver
+                </button>
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+</div>
+
+<mat-dialog-actions align="end">
+  <button class="btn-cancel" type="button" mat-raised-button (click)="cerrar()">
+    Cerrar
+  </button>
+</mat-dialog-actions>

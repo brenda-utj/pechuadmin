@@ -1,0 +1,243 @@
+<h3 mat-dialog-title align="center">{{ title }}</h3>
+
+<mat-dialog-content style="margin: 0.5rem">
+  <br>
+    <form [formGroup]="ticketForm" style="text-align: center;">
+      <div  class="row bg_1">
+        <div class="col-3">
+          <mat-form-field class="full-width">
+            <mat-label>Folio</mat-label>
+            <input matInput formControlName="folio">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row bg_1">
+        <div class="col-5">
+          <mat-form-field class="full-width">
+            <mat-label>Título</mat-label>
+            <input matInput required placeholder="Ingresa un título breve" formControlName="titulo" />
+          </mat-form-field>
+        </div>
+        <div class="col-5">
+          <mat-form-field class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput required placeholder="Ingresa una descripción detallada" formControlName="descripcion"
+              rows="3">
+            </textarea>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field class="full-width">
+            <mat-label>Color</mat-label>
+            <input matInput type="color" formControlName="color">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row bg_1">
+        <div class="col-3">
+          <mat-form-field class="full-width">
+            <mat-label>Zona</mat-label>
+            <mat-select formControlName="zona" (selectionChange)="onZonaChange()">
+              @for (zona of zonas; track zona) {
+                <mat-option [value]=zona>
+                  {{ zona?.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-3">
+          <mat-form-field class="full-width">
+            <mat-label>Sucursales</mat-label>
+            <mat-select formControlName="sucursales" multiple>
+              <!-- Contenedor fijo arriba del panel -->
+              <div class="filter-input-container">
+                <input matInput placeholder="Filtrar..." autocomplete="off" [(ngModel)]="sucursal"
+                  [ngModelOptions]="{standalone: true}" (keyup)="onKey2($event.key); updateFilters2();">
+                </div>
+                @for (sucursal of (sucursalesAux || sucursales); track sucursal) {
+                  <mat-option [value]="sucursal">
+                    {{ sucursal.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <mat-form-field class="full-width">
+              <mat-label>Tipo incidencia</mat-label>
+              <mat-select formControlName="tipoIncidencia">
+                @for (tipoIncidencia of tiposIncidencia; track tipoIncidencia) {
+                  <mat-option [value]=tipoIncidencia>
+                    {{ tipoIncidencia }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <mat-form-field class="full-width">
+              <mat-label>Responsables</mat-label>
+              <mat-select formControlName="responsables" multiple>
+                <div class="filter-input-container">
+                  <input matInput placeholder="Filtrar..." autocomplete="off" [(ngModel)]="name"
+                    [ngModelOptions]="{standalone: true}" (keyup)="updateFilters()">
+                  </div>
+                  @for (user of (usersAux || users || []); track user) {
+                    <mat-option [value]="user">
+                      {{ user.name + ' ' + user.lastname }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row bg_1">
+            <div class="col-4">
+              <mat-form-field class="full-width">
+                <mat-label>Departamento</mat-label>
+                <mat-select formControlName="departamento">
+                  @for (department of departments; track department) {
+                    <mat-option [value]=department>
+                      {{ department.name }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field class="full-width">
+                <mat-label>Prioridad</mat-label>
+                <mat-select formControlName="prioridad">
+                  @for (prioridad of prioridades; track prioridad) {
+                    <mat-option [value]=prioridad>
+                      {{ prioridad }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field class="full-width">
+                <mat-label>Fecha límite</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fechaLimite" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="doc gray">
+            <div style="display: flex; flex-wrap: wrap;">
+              <!-- Mostrar imágenes existentes (solo URL, sin File) -->
+              @for (url of existingImageUrls; track url) {
+                <div class="doc size19 white">
+                  <label class="custom-file-upload">
+                    <img [src]="getSafeUrl(url)" class="size-image" alt="..."
+                      onerror="this.src = './assets/img/PDF_file_icon.svg'">
+                    </label>
+                    <br>
+                      <button type="button" mat-raised-button color="primary" (click)="openImage(url)"
+                      style="margin-right: 0.5rem;">Descargar</button>
+                      <button type="button" mat-raised-button color="warn" (click)="eliminarDocumento(url)">Eliminar</button>
+                    </div>
+                  }
+
+                  <!-- Mostrar imágenes nuevas (ImageSnippet con file) -->
+                  @for (imageSnippet of newImages; track imageSnippet) {
+                    <div class="doc size19 white">
+                      <label class="custom-file-upload">
+                        <img [src]="getSafeUrl(imageSnippet.src)" class="size-image" alt="..."
+                          onerror="this.src = './assets/img/PDF_file_icon.svg'">
+                        </label>
+                        <br>
+                          <button type="button" mat-raised-button color="primary"
+                          (click)="openImage(imageSnippet.src)">Descargar</button>
+                          <button type="button" mat-raised-button color="warn"
+                          (click)="eliminarDocumento(imageSnippet.src)">Eliminar</button>
+                        </div>
+                      }
+
+                      <div class="doc size19 white">
+                        <label for="file-upload" class="custom-file-upload">
+                          <img src='./assets/img/add-image.png'>
+                        </label>
+                        <input #imageInput id="file-upload" (change)="processImage(imageInput)" type="file"
+                          accept=".jpeg, .jpg, .png, .pdf" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <br>
+
+                      @for (comment of comentarios; track comment) {
+                        <div class="row d-flex" [style.align-items]="'center'"
+                          [style.justify-content]="comment.user?._id === user._id ? 'flex-end' : 'flex-start'">
+                          <!-- Columna de la burbuja -->
+      <div [ngClass]="{
+        'col-auto': true,
+        'order-2': comment.user?._id === user._id,
+        'order-1': comment.user?._id !== user._id
+      }">
+                            <div [ngClass]="{'chat-bubble': true, 'me': comment.user?._id === user._id}">
+                              <span class="author">{{ comment.user?.name || 'Anónimo' }}</span>
+                              <p>{{ comment.text }}</p>
+                            </div>
+                          </div>
+                          <!-- Columna del timestamp -->
+      <div [ngClass]="{
+        'col-auto': true,
+        'order-1': comment.user?._id === user._id,
+        'order-2': comment.user?._id !== user._id
+      }">
+                            <span class="timestamp" style="font-size: small;">
+                              {{ comment.fecha | date:'dd-MM-yyyy HH:mm' }}
+                            </span>
+                          </div>
+                        </div>
+                      }
+
+
+                      <br>
+                        <br>
+
+                          <!-- <div class="row bg_1"> -->
+                          <div class="row">
+                            <div class="col-10">
+                              <mat-form-field class="full-width">
+                                <mat-label>Comentario</mat-label>
+                                <input matInput placeholder="Ingresa un Comentario" formControlName="comentario">
+                              </mat-form-field>
+                            </div>
+                            <div class="col-2" style="display: flex; justify-content: end;">
+                              <button class="btn-g" type="button" mat-raised-button (click)="addComment()"
+                              style="margin-right: 1rem;">Comentar</button>
+                            </div>
+                          </div>
+
+                          <br>
+
+                          </form>
+                        </mat-dialog-content>
+                        <br>
+                          <mat-dialog-actions style="display: flex; justify-content: space-between; align-items: center;">
+                            <!-- Botón de eliminar a la izquierda -->
+                            <div>
+                              @if (canDelete) {
+                                <button class="btn-cancel" type="button" mat-raised-button color="warn" (click)="eliminar()">
+                                  Eliminar ticket
+                                </button>
+                              }
+                            </div>
+
+                            <!-- Botones de cancelar y guardar alineados a la derecha -->
+                            <div style="display: flex; gap: 1rem;">
+                              <button class="btn-cancel" type="button" mat-raised-button (click)="cancelar()">
+                                Cancelar
+                              </button>
+                              <button class="btn-g" type="button" mat-raised-button color="primary" (click)="guardar()"
+                              [disabled]="ticketForm.invalid">Guardar</button>
+                            </div>
+                          </mat-dialog-actions>

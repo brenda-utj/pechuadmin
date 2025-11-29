@@ -1,0 +1,15 @@
+.sidebar {
+  color: white;
+  background-color: #E53F2D;
+  height: 100%;
+}
+
+.router-link-active {
+  background-color: white;
+  color: #E53F2D;
+}
+
+.username {
+  padding: 0 16px;
+
+}

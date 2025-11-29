@@ -1,0 +1,9 @@
+
+<!-- <pre>
+{{calendarOptions.events | json}}
+</pre> -->
+<full-calendar
+  [options]="calendarOptions"
+  (datesSet)="onMonthChanges($event)"
+  (eventClick)="onEventClick($event)">
+</full-calendar>

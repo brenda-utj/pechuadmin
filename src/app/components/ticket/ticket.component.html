@@ -1,0 +1,118 @@
+<mat-card appearance="outlined" class="ticket-mat-card">
+  <!-- Fila para el botón de descarga -->
+  <div class="row download-button-container">
+    <!-- <div class="col">
+    <mat-slide-toggle>Lista</mat-slide-toggle>
+  </div> -->
+  <!-- <div class="col" style="display: flex; justify-content: end;">
+  <button mat-icon-button class="button-9" role="button">Descargar</button>
+</div> -->
+</div>
+
+<!-- Fila para el contenedor de tickets -->
+<div class="row horizontal-scroll-container">
+  <div cdkDropListGroup class="cdkDropListGroup">
+    <!-- BACKLOG -->
+    <div class="ticket-container">
+      <h2>BACKLOG</h2>
+      <div cdkDropList [id]="ESTADO_BACKLOG" [cdkDropListData]="ticketsBacklog" class="ticket-list"
+        (cdkDropListDropped)="drop($event)">
+        @for (ticket of ticketsBacklog; track ticket) {
+          <div class="ticket-box" cdkDrag [cdkDragData]="ticket"
+            (click)="openTicketDialog(ticket)">
+            <div class="ticket-title">{{ ticket.folio }}</div>
+            <div class="ticket-title">{{ ticket.titulo }}</div>
+            <div class="ticket-date">{{ ticket.fechaLimite | date: 'dd MMM' }}</div>
+            <div class="ticket-status" [style.background]="ticket.color"></div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- PENDIENTE -->
+    <div class="ticket-container">
+      <h2>PENDIENTE</h2>
+      <div cdkDropList [id]="ESTADO_PENDIENTE" [cdkDropListData]="ticketsPendiente" class="ticket-list"
+        (cdkDropListDropped)="drop($event)">
+        @for (ticket of ticketsPendiente; track ticket) {
+          <div class="ticket-box" cdkDrag [cdkDragData]="ticket"
+            (click)="openTicketDialog(ticket)">
+            <div class="ticket-title">{{ ticket.folio }}</div>
+            <div class="ticket-title">{{ ticket.titulo }}</div>
+            <div class="ticket-date">{{ ticket.fechaLimite | date: 'dd MMM' }}</div>
+            <div class="ticket-status" [style.background]="ticket.color"></div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- EN PROCESO -->
+    <div class="ticket-container">
+      <h2>EN PROCESO</h2>
+      <div cdkDropList [id]="ESTADO_EN_PROCESO" [cdkDropListData]="ticketsEnProceso" class="ticket-list"
+        (cdkDropListDropped)="drop($event)">
+        @for (ticket of ticketsEnProceso; track ticket) {
+          <div class="ticket-box" cdkDrag [cdkDragData]="ticket"
+            (click)="openTicketDialog(ticket)">
+            <div class="ticket-title">{{ ticket.folio }}</div>
+            <div class="ticket-title">{{ ticket.titulo }}</div>
+            <div class="ticket-date">{{ ticket.fechaLimite | date: 'dd MMM' }}</div>
+            <div class="ticket-status" [style.background]="ticket.color"></div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- EN REVISION -->
+    <div class="ticket-container">
+      <h2>EN REVISION</h2>
+      <div cdkDropList [id]="ESTADO_EN_REVISION" [cdkDropListData]="ticketsEnRevision" class="ticket-list"
+        (cdkDropListDropped)="drop($event)">
+        @for (ticket of ticketsEnRevision; track ticket) {
+          <div class="ticket-box" cdkDrag [cdkDragData]="ticket"
+            (click)="openTicketDialog(ticket)">
+            <div class="ticket-title">{{ ticket.folio }}</div>
+            <div class="ticket-title">{{ ticket.titulo }}</div>
+            <div class="ticket-date">{{ ticket.fechaLimite | date: 'dd MMM' }}</div>
+            <div class="ticket-status" [style.background]="ticket.color"></div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- TERMINADO -->
+    <div class="ticket-container">
+      <h2>TERMINADO</h2>
+      <div cdkDropList [id]="ESTADO_TERMINADO" [cdkDropListData]="ticketsTerminado" class="ticket-list"
+        (cdkDropListDropped)="drop($event)" [cdkDropListEnterPredicate]="canEnterTerminado">
+        @for (ticket of ticketsTerminado; track ticket) {
+          <div class="ticket-box" cdkDrag [cdkDragData]="ticket"
+            (click)="openTicketDialog(ticket)">
+            <div class="ticket-title">{{ ticket.folio }}</div>
+            <div class="ticket-title">{{ ticket.titulo }}</div>
+            <div class="ticket-date">{{ ticket.fechaLimite | date: 'dd MMM' }}</div>
+            <div class="ticket-status" [style.background]="ticket.color"></div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notification-container">
+  <button class="floating-button" (click)="openDialogNotification()" style="bottom: 80px;">
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <span class="notification-badge">
+    {{ notificationCount }}
+  </span>
+</div>
+
+@if (user?.credentials?.ticket?.init?.crear_ticket) {
+  <button class="floating-button" (click)="openDialogCreate()">
+    +
+  </button>
+}
+
+</mat-card>

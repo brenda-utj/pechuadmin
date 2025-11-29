@@ -1,0 +1,208 @@
+.btn-g {
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  min-width: 64px;
+  line-height: 36px;
+  padding: 0 16px;
+  border-width: 0;
+  border-radius: 4px;
+  background-color: #444dd0;
+  color: #ffff;
+}
+
+.btn-cancel {
+  margin-left: 1rem;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  min-width: 64px;
+  line-height: 36px;
+  padding: 0 16px;
+  border-width: 0;
+  border-radius: 4px;
+  background-color: #f44336;
+  color: #ffff;
+}
+
+.edit {
+  color: #f3c545;
+}
+
+.delete {
+  color: #f44336;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.doc{
+  border-width: 2px;
+  border-style: solid;
+  
+  border-radius: 10px;
+
+  margin: 2px;
+  text-align: center;
+}
+
+.gray{
+  border-color: gray;
+}
+
+.white{
+  border-color: white;
+}
+
+.size19{
+  width: 19%;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  display: inline-block;
+}
+
+.doc{
+border-width: 2px;
+border-style: solid;
+
+border-radius: 10px;
+
+margin: 2px;
+text-align: center;
+}
+
+.size19{
+width: 19%;
+}
+.w-33{
+width: 33%;
+}
+
+/* Ajustes generales del diálogo */
+::ng-deep .mat-mdc-dialog-container {
+  border-radius: 10px;
+  // background-color: #f9f9f9;
+}
+
+/* Estiliza el contenedor principal para darle más aire */
+/* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version. */
+mat-dialog-content {
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+/* Ejemplo de fila con fondo tenue */
+.bg_1 {
+  // background-color: #f4f4f4;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+/* Estilo de burbuja de chat para cada comentario */
+.chat-bubble {
+  background-color: #26b9ff;       /* color de fondo, puedes ajustarlo */
+  border-radius: 15px;
+  padding: 0.75rem 1rem;
+  // margin: 0.5rem 0;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  width: fit-content;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+/* Pequeña "flecha" lateral de la burbuja (estilo pseudo-elemento) */
+.chat-bubble::before {
+  content: "";
+  position: absolute;
+  left: -10px; /* Ajusta según donde quieras la flecha */
+  top: 10px;   /* Ajusta la vertical */
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-right-color: #26b9ff; /* color de la burbuja */
+}
+
+/* Opcional: burbujas alineadas a la derecha (por ejemplo, si el autor es el usuario logueado) */
+.chat-bubble.me {
+  margin-left: auto;
+  background-color: #b6f4ff; /* otro color de fondo si eres tú */
+  margin-right: 1rem;
+  // margin-left: 0rem;
+}
+
+.chat-bubble.me::before {
+  left: auto;
+  right: -10px;
+  border-right-color: transparent;
+  border-left-color: #b6f4ff;
+}
+
+/* Texto dentro de la burbuja */
+.chat-bubble p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Autor del comentario en negrita */
+.chat-bubble .author {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.order-1 {
+  order: 1;
+}
+.order-2 {
+  order: 2;
+}
+
+// Contenedor con position: sticky para el input:
+.filter-input-container {
+  position: sticky;
+  top: 0;
+  z-index: 1;          // Asegura que quede por encima de las opciones al hacer scroll
+  background: white;   // Fija un color de fondo para que no sea transparente
+  padding: 8px;        // Espaciado alrededor del input
+}
+
+/* For Mobile */
+@media screen and (max-width: 540px) {
+.size19{
+  width: 100%;
+}
+.w-33{
+  width: 85%;
+}
+}
+
+
+.size-image{
+width: 60%;
+height: auto;
+}
+.gray{
+border-color: gray;
+}
+
+.white{
+border-color: white;
+}
+
+
+@media screen and (max-width: 767px) {
+  .row.bg_1 {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .col-3, .col-6 {
+    width: 100%;
+  }
+}

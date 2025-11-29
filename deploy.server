@@ -1,0 +1,8 @@
+rm -rf admin-pechugon
+tar xvzf dist.tgz
+rm -rf /home/ec2-user/pollos/src/public
+mv dist /home/ec2-user/pollos/src/public
+pm2 restart server
+rm -rf dist.tgz
+rm -rf dist
+rm -rf deploy.sh

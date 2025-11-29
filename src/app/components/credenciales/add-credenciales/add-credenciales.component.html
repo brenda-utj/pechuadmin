@@ -1,0 +1,47 @@
+<h1 mat-dialog-title align="center">{{ title }}</h1>
+<mat-dialog-content class="dialog-content-scroll">
+  <div style="display: flex; justify-content: start;">
+    <h6><strong>Nota:</strong> Los campos marcados con (*) son obligatorios.</h6>
+  </div>
+  <div class="row" style="display: flex;">
+    <div class="col" style="flex-basis: 15%;">
+      <mat-form-field class="filter-select" appearance="outline">
+        <mat-label>Módulo</mat-label>
+        <mat-select [(ngModel)]="selectedModule" (selectionChange)="getSubmodules()">
+          @for (module of modules; track module) {
+            <mat-option [value]="module"> {{module.name}} </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col" style="flex-basis: 15%;">
+      <mat-form-field class="filter-select" appearance="outline">
+        <mat-label>Submódulo</mat-label>
+        <mat-select [(ngModel)]="selectedSubmodule">
+          @for (submodule of submodules; track submodule) {
+            <mat-option [value]="submodule"> {{submodule.name}} </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col" style="flex-basis: 15%;">
+      <mat-form-field appearance="outline" class="div-form">
+        <mat-label>Nombre (*)</mat-label>
+        <input matInput [(ngModel)]="selectedName"/>
+      </mat-form-field>
+    </div>
+
+    <div class="col" style="flex-basis: 35%;">
+      <mat-form-field appearance="outline" class="div-form">
+        <mat-label>Descripción</mat-label>
+        <input matInput [(ngModel)]="selectedDescription"/>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn-cancel" type="button" (click)="cancelar()">Cancelar</button>
+  <button class="btn-g" type="button" (click)="save()">Guardar</button>
+</mat-dialog-actions>

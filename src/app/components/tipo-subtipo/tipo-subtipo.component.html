@@ -1,0 +1,63 @@
+
+    <div class="row">
+      <div class="col d-flex justify-content-end">
+        @if (user?.credentials?.gastos?.tipos_y_subtipos?.agregar_tipos) {
+          <button mat-flat-button color="primary" (click)="openAddTipoDialog(null)">Agregar tipo</button>
+        }
+      </div>
+    </div>
+<br>
+
+  <mat-card appearance="outlined" class="form-card mat-elevation-z8" [hidden]="!user?.credentials?.gastos?.tipos_y_subtipos?.ver_tbl_tipos">
+    <table mat-table [dataSource]="dataSource">
+
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+        <td mat-cell *matCellDef="let tipo">{{ tipo.nombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef> Descripción </th>
+        <td mat-cell *matCellDef="let tipo">{{ tipo.descripcion }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let tipo">
+          <div>
+            @if (user?.credentials?.gastos?.tipos_y_subtipos?.editar) {
+              <mat-icon color="primary" class="pointer" style="margin-right: 5px;" (click)="openAddTipoDialog(tipo)"> edit
+              </mat-icon>
+            }
+            @if (user?.credentials?.gastos?.tipos_y_subtipos?.eliminar) {
+              <mat-icon color="warn" class="pointer" style="margin-left: 5px;" (click)="removeTipo(tipo._id)"> delete
+              </mat-icon>
+            }
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr mat-header-row *matHeaderRowDef="['filter1', 'filter2']"></tr>
+      <ng-container matColumnDef="filter1">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-form-field class="filter-search" appearance="outline"><input matInput placeholder="Filtrar..." autocomplete="off" (keyup)="updateFilters()"
+          [(ngModel)]="nombre"></mat-form-field>
+        </th>
+      </ng-container>
+
+      <ng-container matColumnDef="filter2">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-form-field class="filter-search" appearance="outline"><input matInput placeholder="Filtrar..." autocomplete="off" (keyup)="updateFilters()"
+          [(ngModel)]="descripcion"></mat-form-field>
+        </th>
+      </ng-container>
+    </table>
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons (page)="handlePageEvent($event)"></mat-paginator>
+  </mat-card>
+
+  <ng-template #loading>
+    <mat-spinner></mat-spinner>
+  </ng-template>

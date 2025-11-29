@@ -1,0 +1,26 @@
+.contenedor-imagen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 30vh;
+  overflow: hidden; /* Evita que la imagen se desborde del contenedor */
+}
+
+.contenedor-imagen img {
+  max-width: 100%;
+  width: 300px; /* Establece un ancho fijo */
+  height: auto; /* Mantiene la proporción */
+}
+
+@media (max-width: 768px) {
+  .contenedor-imagen img {
+    width: 200px; /* Ajusta el ancho para pantallas pequeñas */
+  }
+}
+
+@media (min-width: 1680px) {
+  .contenedor-imagen img {
+    width: 500px; /* Ajusta el ancho para pantallas grandes */
+  }
+}

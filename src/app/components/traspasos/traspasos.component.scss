@@ -1,0 +1,14 @@
+.grid-2-col {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 5%;
+}
+
+.grid-3-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+table {
+  width: 100%;
+}

@@ -1,0 +1,153 @@
+<h1 mat-dialog-title align="center">{{ tittle }}</h1>
+<mat-dialog-content class="dialog-content-scroll">
+    <!-- Campos principales -->
+    <div style="display: flex; justify-content: start;">
+        <h6><strong>Nota:</strong> Los campos marcados con (*) son obligatorios.</h6>
+    </div>
+    <div class="row" style="display: flex;">
+        <div class="col" style="flex-basis: 25%;">
+            <mat-form-field appearance="outline" class="div-form">
+                <mat-label>Nombre</mat-label>
+                <input matInput [(ngModel)]="selectedName"/>
+            </mat-form-field>
+        </div>
+
+        <div class="col" style="flex-basis: 75%;">
+            <mat-form-field appearance="outline" class="div-form">
+                <mat-label>Nombre vista</mat-label>
+                <input matInput [(ngModel)]="selectedDisplayName"/>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row" style="display: flex;">
+        <div class="col" style="flex-basis: 33%;">
+            <mat-form-field appearance="outline" class="div-form">
+                <mat-label>Ícono</mat-label>
+                <input matInput [(ngModel)]="selectedIcon"/>
+            </mat-form-field>
+        </div>
+        <div class="col" style="flex-basis: 33%;">
+            <mat-form-field appearance="outline" class="div-form">
+                <mat-label>Ruta</mat-label>
+                <input matInput [(ngModel)]="selectedFile"/>
+            </mat-form-field>
+        </div>
+        <div class="col" style="flex-basis: 33%;">
+            <mat-form-field appearance="outline" class="div-form">
+                <mat-label>Posición</mat-label>
+                <input type="number" matInput [(ngModel)]="selectedPosition" min="1" (input)="onInputChange($event)"/>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Submódulos -->
+    <div class="row" style="display: flex; flex-direction: column;">
+        <div class="row">
+            <h6><strong>Submódulos</strong></h6>
+        </div>
+        <div class="row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap;">
+            <div class="col" style="flex: 1; min-width: 150px;">
+                <mat-form-field appearance="outline" class="div-form">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput [(ngModel)]="selectedSubName"/>
+                </mat-form-field>
+            </div>
+            <div class="col" style="flex: 1; min-width: 150px;">
+                <mat-form-field appearance="outline" class="div-form">
+                    <mat-label>Nombre vista</mat-label>
+                    <input matInput [(ngModel)]="selectedSubDisplayName"/>
+                </mat-form-field>
+            </div>
+            <div class="col" style="flex: 1; min-width: 150px;">
+                <mat-form-field appearance="outline" class="div-form">
+                    <mat-label>Ícono</mat-label>
+                    <input matInput [(ngModel)]="selectedSubIcon"/>
+                </mat-form-field>
+            </div>
+            <div class="col" style="flex: 1; min-width: 150px;">
+                <mat-form-field appearance="outline" class="div-form">
+                    <mat-label>Credencial</mat-label>
+                    <input matInput [(ngModel)]="selectedCredential"/>
+                </mat-form-field>
+            </div>
+            <div class="col" style="flex: 1; display: flex; align-items: center; min-width: 200px;">
+                <mat-form-field appearance="outline" class="div-form">
+                    <mat-label>Ruta</mat-label>
+                    <input matInput [(ngModel)]="selectedSubFile"/>
+                </mat-form-field>
+                <button
+                    class="btn-g"
+                    mat-raised-button
+                    color="primary"
+                    (click)="addSubmodule()"
+                    style="margin-left: 10px; width: 100%;"
+                >
+                    Agregar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de submódulos -->
+    <div class="mat-elevation-z8" style="margin-top: 1rem; margin-bottom: 2rem;">
+        <mat-table [dataSource]="dataSource">
+            <!-- nombre -->
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                <mat-cell *matCellDef="let submodule">
+                    {{ submodule.name }}
+                </mat-cell>
+            </ng-container>
+            <!-- nombre vista -->
+            <ng-container matColumnDef="displayName">
+                <mat-header-cell *matHeaderCellDef>Nombre vista</mat-header-cell>
+                <mat-cell *matCellDef="let submodule">
+                    {{ submodule.displayName }}
+                </mat-cell>
+            </ng-container>
+            <!-- ícono -->
+            <ng-container matColumnDef="icon">
+                <mat-header-cell *matHeaderCellDef>Ícono</mat-header-cell>
+                <mat-cell *matCellDef="let submodule">
+                    {{ submodule.icon }}
+                </mat-cell>
+            </ng-container>
+            <!-- credencial -->
+            <ng-container matColumnDef="credential">
+                <mat-header-cell *matHeaderCellDef>Credencial</mat-header-cell>
+                <mat-cell *matCellDef="let submodule">
+                    {{ submodule.credential }}
+                </mat-cell>
+            </ng-container>
+            <!-- archivo -->
+            <ng-container matColumnDef="file">
+                <mat-header-cell *matHeaderCellDef>Ruta</mat-header-cell>
+                <mat-cell *matCellDef="let submodule">
+                    {{ submodule.file }}
+                </mat-cell>
+            </ng-container>
+            <!-- acciones -->
+            <ng-container matColumnDef="acciones">
+                <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                <mat-cell *matCellDef="let submodule; let i = index">
+                    <button [disabled]="isEditing" mat-icon-button (click)="editElement(i)" class="edit">
+                        <mat-icon color="primary">edit</mat-icon>
+                    </button>
+                    <button [disabled]="isEditing" mat-icon-button (click)="deleteElement(i)" class="delete">
+                        <mat-icon class="delete">delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="['name', 'displayName', 'icon', 'credential', 'file', 'acciones']"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: ['name', 'displayName', 'icon', 'credential', 'file', 'acciones']"></mat-row>
+        </mat-table>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button class="btn-cancel" type="button" (click)="cancelar()">Cancelar</button>
+    <button class="btn-g" type="button" (click)="save()">Guardar</button>
+</mat-dialog-actions>

@@ -1,0 +1,67 @@
+.edit {
+    color: #f3c545;
+}
+
+.delete {
+    color: #f44336;
+}
+
+.button-9 {
+    appearance: button;
+    backface-visibility: hidden;
+    background-color: #3f51b5;
+    border-radius: 6px;
+    border-width: 0;
+    box-shadow: rgba(50, 50, 93, 0.1) 0 0 0 1px inset,
+      rgba(50, 50, 93, 0.1) 0 2px 5px 0, rgba(0, 0, 0, 0.07) 0 1px 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
+      Ubuntu, sans-serif;
+    font-size: 100%;
+    height: 44px;
+    line-height: 1.15;
+    margin: 12px 0 0;
+    outline: none;
+    overflow: hidden;
+    padding: 0 25px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    transform: translateZ(0);
+    transition: all 0.2s, box-shadow 0.08s ease-in;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: fit-content;
+}
+
+.button-9:disabled {
+    cursor: default;
+}
+
+.button-9.add {
+    background-color: #27b451;
+    color: #fff !important;;
+}
+
+.button-9.delete {
+    background-color: #f44336;
+}
+
+table {
+    width: 100%;
+
+    th, td {
+      text-align: center;
+      vertical-align: middle;
+    }
+}
+
+.mat-elevation-z8 {
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+      0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    width: 100%;
+    //margin-top: 2rem;
+  }

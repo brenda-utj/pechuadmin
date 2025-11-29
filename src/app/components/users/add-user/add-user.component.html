@@ -1,0 +1,130 @@
+<h3 mat-dialog-title align="center">Agregar usuario</h3>
+<div class="container">
+  <mat-dialog-content>
+    <form [formGroup]="userForm" (ngSubmit)="addUser()">
+
+      <div class="row">
+        <div class="col-4">
+          <mat-form-field appearance="outline" class="div-form">
+            <mat-label>Username</mat-label>
+            <input #username required matInput placeholder="Ingrese un username" formControlName="username">
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+          <mat-form-field appearance="outline" class="div-form">
+            <mat-label>Nombre</mat-label>
+            <input matInput required placeholder="Nombre" formControlName="name">
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+          <mat-form-field appearance="outline" class="div-form">
+            <mat-label>Apellido(s)</mat-label>
+            <input matInput required placeholder="Apellido(s)" formControlName="lastname">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <mat-form-field appearance="outline" class="div-form">
+            <mat-label>Correo electrónico</mat-label>
+            <input matInput required placeholder="correo@ejemplo.com" formControlName="email">
+          </mat-form-field>
+        </div>
+        @if (!isEditMode) {
+          <div class="col-4">
+            <mat-form-field appearance="outline" class="div-form">
+              <mat-label>Contraseña</mat-label>
+              <input matInput required placeholder="Indique una contraseña" formControlName="password" type="password">
+            </mat-form-field>
+          </div>
+        }
+        <div class="col-4">
+           <mat-form-field appearance="outline" class="filter-select">
+            <mat-label>Rol del usuario</mat-label>
+            <mat-select formControlName="role" required>
+              @for (rol of roles; track rol) {
+                <mat-option [value]="rol">
+                  {{rol}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <mat-form-field appearance="outline" class="filter-select" #zonaRef id="zonaRef">
+            <mat-label>Elija una zona</mat-label>
+            <mat-select formControlName="zona" required
+              (selectionChange)="getSucursales(userForm.value.zona)">
+              @for (zona of zonas; track zona) {
+                <mat-option [value]="zona._id">
+                  {{zona.name}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+          <mat-form-field appearance="outline" class="filter-select" #zonasRef id="zonasRef">
+            <mat-label>Acceso a zonas</mat-label>
+              <mat-select [disabled]="disableZona" formControlName="zonas"
+                (selectionChange)="getSucursales(userForm.value.zona)" multiple>
+                @for (zona of zonas; track zona) {
+                  <mat-option [value]="zona._id">
+                    {{zona.name}}
+                  </mat-option>
+                }
+              </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+           @if (userForm.value.zona !== '') {
+          <mat-form-field appearance="outline" class="filter-select">
+            <mat-label>Elige sucursal inicial</mat-label>
+            <mat-select formControlName="sucursal" required>
+              @for (sucursal of sucursales; track sucursal) {
+                <mat-option [value]="sucursal._id">
+                  {{sucursal.name}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-4">
+          <mat-form-field appearance="outline" class="div-form">
+              <mat-label>Clave autorización en punto de venta</mat-label>
+              <input matInput placeholder="Clave autorización" formControlName="authkey">
+          </mat-form-field>
+        </div>
+      </div>
+      <mat-dialog-actions align="end">
+        @if (isEditMode && editPassword) {
+          <button mat-flat-button 
+                  (click)="openPanel()"  
+                  color="primary" 
+                  [disabled]="!user?.credentials?.personal?.usuarios.editar_contrasena"> 
+                  Editar contraseña 
+          </button>
+        }
+        <button type="submit" [disabled]="!userForm.valid" mat-flat-button color="primary">
+        {{data !== null ? 'Actualizar usuario' : 'Crear usuario'}} </button>
+      </mat-dialog-actions>
+    </form>
+  </mat-dialog-content>
+  <mat-expansion-panel [expanded]="opened">
+    <div class="row mt-4">
+      <div class="col-4">
+        <mat-form-field appearance="outline" class="div-form">
+          <mat-label>Ingrese la nueva contraseña</mat-label>
+          <input matInput [(ngModel)]="password" type="password" placeholder="Nuevo password">
+        </mat-form-field>
+      </div>
+    </div>
+    <button mat-flat-button color="primary" (click)="changePassword()">Actualizar</button>
+  </mat-expansion-panel>
+</div>

@@ -1,0 +1,75 @@
+<mat-card appearance="outlined" style="margin-bottom: 1rem;">
+    <mat-card-content>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button mat-flat-button (click)="openDialogCreate()" class="button-9" role="button">Agregar credencial</button>
+            <button mat-flat-button class="button-9 add" role="button" routerLink="/asignar-credencial">Asignar credencial</button>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-card appearance="outlined">
+    <!-- <div style="margin-top: 1rem; margin-bottom: 2rem;" *ngIf="dataSource.data.length > 0"> -->
+    <div style="margin-top: 1rem; margin-bottom: 2rem;">
+        <h5 style="text-align: center;">Credenciales</h5>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table">
+            <ng-container matColumnDef="module">
+                <th mat-header-cell *matHeaderCellDef>Módulo</th>
+                <td mat-cell *matCellDef="let element"> {{ element.module.name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="submodule">
+                <th mat-header-cell *matHeaderCellDef>Submódulo</th>
+                <td mat-cell *matCellDef="let element"> {{ element.submodule?.name || '' }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Descripción</th>
+                <td mat-cell *matCellDef="let element"> {{ element.description }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                <td mat-cell *matCellDef="let element;">
+                    <button mat-icon-button (click)="openDialogEdit(element)" class="edit">
+                        <mat-icon color="primary">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="deleteElement(element)" class="delete">
+                        <mat-icon class="delete">delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['module', 'submodule', 'name', 'description', 'acciones']"></tr>
+            <tr mat-row *matRowDef="let element; columns:['module', 'submodule', 'name', 'description', 'acciones']"></tr>
+            <tr mat-header-row *matHeaderRowDef="['filter1', 'filter2', 'filter3']"></tr>
+            <ng-container matColumnDef="filter1">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-form-field class="filter-search" appearance="outline"> <mat-icon matPrefix>search</mat-icon> <input matInput placeholder="Filtrar..." autocomplete="off" (keyup)="updateFilters()"
+                    [(ngModel)]="module"></mat-form-field>
+              </th>
+            </ng-container>
+
+            <ng-container matColumnDef="filter2">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-form-field class="filter-search" appearance="outline"> <mat-icon matPrefix>search</mat-icon><input matInput placeholder="Filtrar..." autocomplete="off" (keyup)="updateFilters()"
+                    [(ngModel)]="submodule"></mat-form-field>
+              </th>
+            </ng-container>
+
+            <ng-container matColumnDef="filter3">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-form-field class="filter-search" appearance="outline"> <mat-icon matPrefix>search</mat-icon><input matInput placeholder="Filtrar..." autocomplete="off" (keyup)="updateFilters()"
+                      [(ngModel)]="name"></mat-form-field>
+                </th>
+              </ng-container>
+        </table>
+    </div>
+    <!-- Mensaje de error si no hay datos -->
+    <!-- <div style="margin-top: 1rem; margin-bottom: 2rem; text-align: center;" *ngIf="!dataSource.data || dataSource.data.length === 0">
+        <p>No se han encontrado credenciales registradas.</p>
+    </div> -->
+</mat-card>

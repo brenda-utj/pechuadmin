@@ -1,0 +1,109 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- SIDEBAR -->
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="false">
+    <mat-toolbar>Menú</mat-toolbar>
+
+    <!-- NAVLIST -->
+    <mat-nav-list>
+      @for (module of modules; track module) {
+        <!-- Verificar si el usuario tiene permiso para ver el módulo -->
+        @if (hasPermission(module.name) && module.view) {
+          <!-- Verificar si el módulo tiene submódulos -->
+          @if (module.submodules && module.submodules.length > 0) {
+            <!-- Mostrar mat-expansion-panel con submódulos -->
+            <mat-expansion-panel routerLinkActive="active-group" [routerLinkActiveOptions]="{ exact: false }">
+              <mat-expansion-panel-header>
+                <mat-icon>{{ module.icon }}</mat-icon>
+                <span>{{ module.displayName }}</span>
+              </mat-expansion-panel-header>
+              @for (submodule of module.submodules; track submodule) {
+                <!-- Verificar si el usuario tiene permiso para ver el submódulo -->
+                @if (hasPermissionSubmodule(module.name, submodule.permission)) {
+                  <a mat-list-item
+   [routerLink]="submodule.route"
+   routerLinkActive="active"
+   [routerLinkActiveOptions]="{ exact: true }">
+  <mat-icon [attr.aria-label]="submodule.displayName">{{ submodule.icon }}</mat-icon>
+  {{ submodule.displayName }}
+</a>
+
+                }
+              }
+            </mat-expansion-panel>
+          } @else {
+            <a mat-list-item [routerLink]="module.route" [ngClass]="module.customClass" routerLinkActive="active">
+              <mat-icon [attr.aria-label]="module.displayName">{{ module.icon }}</mat-icon>
+              {{ module.displayName }}
+            </a>
+          }
+          <!-- Plantilla para módulos sin submódulos -->
+        }
+      }
+
+      <!-- Configuración -->
+      @if (user?.role === 'super administrativo') {
+        <mat-expansion-panel routerLinkActive="active-group" [routerLinkActiveOptions]="{ exact: false }">
+          <mat-expansion-panel-header>
+            <mat-icon>settings</mat-icon>
+            <span>Configuraciones</span>
+          </mat-expansion-panel-header>
+          <a mat-list-item routerLink="/conf-reporte" routerLinkActive="active">
+            <mat-icon aria-label="Conf. Reporte Dinámico">edit_document</mat-icon>
+            <span>Conf. Reporte Dinámico</span>
+          </a>
+          <a mat-list-item routerLink="/modulos" routerLinkActive="active">
+            <mat-icon aria-label="Modulos">view_module</mat-icon>
+            <span>Administrar Modulos</span>
+          </a>
+          <a mat-list-item routerLink="/credenciales" routerLinkActive="active">
+            <mat-icon aria-label="Credenciales">key</mat-icon>
+            <span>Administrar Credenciales</span>
+          </a>
+        </mat-expansion-panel>
+      }
+      <!-- Configuración -->
+    </mat-nav-list>
+    <!-- NAVLIST -->
+
+  </mat-sidenav>
+  <!-- SIDEBAR -->
+
+  <!-- NAVBAR -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <span>
+        <img src="assets/img/fondo-azul.png" alt="Logo" width="80">
+        Pechu-Admin
+      </span>
+      <span class="separator"></span>
+      @if (!(isHandset$ | async)) {
+        <a (click)="logout()">
+          <mat-icon aria-label="Cerrar sesión">exit_to_app</mat-icon>
+          Cerrar Sesión
+        </a>
+      }
+      @if (!(isHandset$ | async)) {
+        <a mat-button href="#">
+          <mat-icon aria-label="Mi cuenta">account_circle</mat-icon>
+          {{ user?.name | titlecase }} {{ user?.lastname | titlecase }}
+        </a>
+      }
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+    </mat-toolbar>
+    <header>
+      <h1>{{routeOptions?.heading}}</h1>
+    </header>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+    <!-- Add Content Here -->
+  </mat-sidenav-content>
+  <!-- NAVBAR -->
+
+  <!-- CONTENT -->
+  <ng-content></ng-content>
+  <!-- CONTENT -->
+</mat-sidenav-container>

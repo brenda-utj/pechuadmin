@@ -1,0 +1,73 @@
+<div style="text-align: right;">
+  <button mat-flat-button (click)="navigateToAddVacante()" class="button-9">
+    + Agregar vacante
+  </button>
+</div>
+<br>
+<mat-card appearance="outlined" style="text-align: center;">
+  <mat-card-content>
+    <!-- Filtro de texto -->
+    <div id="divSearch">
+      <mat-form-field class="filter-search" appearance="outline">
+        <mat-icon matPrefix>search</mat-icon>
+        <input placeholder="Filtrar por texto..." matInput [(ngModel)]="filtroTexto" (input)="applyFilter()" />
+      </mat-form-field>
+    </div>
+
+    <div class="mat-elevation-z8" style="text-align-last: center">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table">
+        <ng-container matColumnDef="puesto">
+          <th mat-header-cell *matHeaderCellDef>Puesto</th>
+          <td mat-cell *matCellDef="let element">{{ element.puesto?.nombre }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion">
+          <th mat-header-cell *matHeaderCellDef>Descripción</th>
+          <td mat-cell *matCellDef="let element">{{ element.descripcionVacante }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="zona">
+          <th mat-header-cell *matHeaderCellDef>Zona</th>
+          <td mat-cell *matCellDef="let element">{{ element.zona.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaContratacion">
+          <th mat-header-cell *matHeaderCellDef>Fecha Contratación</th>
+          <td mat-cell *matCellDef="let element">{{ element.fechaContratacion | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="viewDetails(element)" class="view" matTooltip="Mostrar detalles">
+              <mat-icon class="pointer custom-blue">visibility</mat-icon>
+            </button>
+            <button mat-icon-button (click)="navigateToEditVacante(element._id)" class="edit"
+              matTooltip="Editar vacante">
+              <mat-icon class="pointer black-icon">edit</mat-icon>
+            </button>
+
+
+            <button mat-icon-button (click)="toggleStatus(element)" class="toggle-status"
+              [matTooltip]="element.estatus == 1 ? 'Deshabilitar vacante' : 'Activar vacante'">
+              <mat-icon class="pointer" [ngClass]="element.estatus == 1 ? 'enabled-icon' : 'disabled-icon'">
+                {{ element.estatus == 1 ? 'highlight_off' : 'check_circle' }}
+              </mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="deleteVacante(element._id, element.estatus)" class="delete"
+              matTooltip="Eliminar de la tabla">
+              <mat-icon color="warn" class="pointer">delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Definición de filas de la tabla -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

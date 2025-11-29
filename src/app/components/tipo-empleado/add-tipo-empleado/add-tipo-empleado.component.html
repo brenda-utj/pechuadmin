@@ -1,0 +1,40 @@
+<h1 mat-dialog-title align="center">{{ tittle }}</h1>
+<mat-dialog-content>
+  <br>
+  <form [formGroup]="tipoEmpleadoForm" style="text-align: center">
+    <div class="row">
+      <div class="col-4">
+        <mat-form-field appearance="outline" class="div-form">
+          <mat-label>Nombre</mat-label>
+          <input matInput placeholder="Ingrese un nombre" formControlName="nombre"
+            (input)="tipoEmpleadoForm.get('nombre').setValue(convertirAMayusculas($event.target.value))" />
+        </mat-form-field>
+      </div>
+      <div class="col-4">
+        <mat-form-field appearance="outline" class="div-form">
+          <mat-label>Prefijo</mat-label>
+          <input matInput placeholder="Ingrese un prefijo" formControlName="prefijo" maxlength="4"
+            (input)="tipoEmpleadoForm.get('prefijo').setValue(convertirAMayusculas($event.target.value))" />
+        </mat-form-field>
+      </div>
+      <div class="col-4">
+        <mat-form-field appearance="outline" class="div-form">
+          <mat-label>Descripción</mat-label>
+          <input matInput placeholder="Ingrese una descripción" formControlName="descripcion"
+            (input)="tipoEmpleadoForm.get('descripcion').setValue(convertirAMayusculas($event.target.value))" />
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+
+</mat-dialog-content>
+<br>
+<mat-dialog-actions align="end">
+
+  <button mat-flat-button color="warn" (click)="cancelar()">
+    Cancelar
+  </button>
+  <button mat-flat-button color="primary" (click)="trimValues()" [disabled]="tipoEmpleadoForm.invalid">
+    Guardar
+  </button>
+</mat-dialog-actions>

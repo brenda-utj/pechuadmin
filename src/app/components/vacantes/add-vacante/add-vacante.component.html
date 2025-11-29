@@ -1,0 +1,335 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+  <!-- Botón Arrow atrás-->
+  <div style="display: flex; align-items: center;">
+    <button mat-icon-button (click)="goBack()" aria-label="Volver atrás" style="color: black;">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span style="color: black; font-size: 16px; margin-left: 4px;">Atrás</span>
+  </div>
+  <h3 mat-dialog-title style="margin: 0; position: absolute; left: 50%; transform: translateX(-50%);">
+    {{ editMode ? 'Editar Vacante' : 'Agregar Vacante' }}
+  </h3>
+</div>
+
+
+<div class="container" [ngClass]="{'overflow' : editMode}">
+  <div style="color: red; font-size: 16px; margin-bottom: 16px;">
+    Todos los campos marcados con * son obligatorios
+  </div>
+  <mat-card appearance="outlined" class="form-card">
+    @if (vacanteForm) {
+      <form [formGroup]="vacanteForm" (ngSubmit)="AddVacante()">
+        <!--Primera row Puesto, descripción y Tipo de empleado-->
+        <div class="row">
+          <div class="col-3">
+            <strong style="text-align: left; display: block;">Puesto / Cargo *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-select formControlName="puesto" placeholder="Selecciona una opción">
+                @for (puesto of puestos; track puesto) {
+                  <mat-option [value]="puesto._id">{{ puesto.nombre }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <strong style="text-align: left; display: block;">Descripción *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <input matInput formControlName="descripcionVacante" placeholder="Descripción">
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <strong style="text-align: left; display: block;">Tipo empleado / Área *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-select formControlName="tipoEmpleado" placeholder="Selecciona una opción">
+                @for (tipo of tiposEmpleados; track tipo) {
+                  <mat-option [value]="tipo._id">{{ tipo.nombre }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <!--Segunda row para columna Descripción del puesto y tareas-->
+        <div class="row">
+          <div class="col-12">
+            <strong style="text-align: left; display: block;">Descripción del puesto y tareas *</strong>
+            <textarea
+            class="custom-textarea"
+            matInput
+            formControlName="descripcionPuesto"
+            rows="7"
+          ></textarea>
+          </div>
+        </div>
+        <!-- Tercera row para zona, sucursal y dirección -->
+        <div class="row">
+          <div class="col-3">
+            <strong style="text-align: left; display: block;">Zona *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-select formControlName="zona" placeholder="Selecciona una opción">
+                @for (zona of zonas; track zona) {
+                  <mat-option [value]="zona._id">{{ zona.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <strong style="text-align: left; display: block;">Sucursal *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-select formControlName="sucursal" placeholder="Selecciona una opción">
+                @for (sucursal of sucursales; track sucursal) {
+                  <mat-option [value]="sucursal._id">{{ sucursal.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <strong style="text-align: left; display: block;">Dirección *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <input matInput formControlName="direccion" placeholder="Dirección">
+            </mat-form-field>
+          </div>
+        </div>
+        <!--Cuarta row para Jornada laboral, lugar de trabajo y Tipo de contrato-->
+        <div class="row">
+          <div class="col-4">
+            <strong style="text-align: left; display: block;">Jornada Laboral *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-select formControlName="jornadaLaboral" placeholder="Selecciona una opción">
+                @for (jornada of jornadas; track jornada) {
+                  <mat-option [value]="jornada">{{ jornada }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <strong style="text-align: left; display: block;">Lugar de trabajo *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-select formControlName="formaTrabajo" placeholder="Selecciona una opción">
+                @for (forma of formasTrabajo; track forma) {
+                  <mat-option [value]="forma">{{ forma }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <strong style="text-align: left; display: block;">Tipo de contrato *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-select formControlName="tipoContrato" placeholder="Selecciona una opción">
+                @for (tipoContrato of tiposContratos; track tipoContrato) {
+                  <mat-option [value]="tipoContrato._id">
+                    {{ tipoContrato.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- Quinta row para Pago, salario, fecha de contratación y cantidad de vacantes -->
+        <div class="row">
+          <div class="col-3">
+            <strong style="text-align: left; display: block;">Pago *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-select formControlName="pago" placeholder="Selecciona una opción">
+                @for (pago of pagos; track pago) {
+                  <mat-option [value]="pago">{{ pago }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <strong style="text-align: left; display: block;">Salario *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <input matInput formControlName="salario" placeholder="Ingresa el salario" type="number" (keypress)="numericOnly($event)"/>
+              <!-- Error si se ingresan letras -->
+              @if (vacanteForm.get('salario').hasError('invalidSalaryLetters')) {
+                <mat-error>
+                  {{ vacanteForm.get('salario').getError('invalidSalaryLetters') }}
+                </mat-error>
+              }
+              <!-- Error si se ingresan números negativos -->
+              @if (vacanteForm.get('salario').hasError('invalidSalaryNegative')) {
+                <mat-error>
+                  {{ vacanteForm.get('salario').getError('invalidSalaryNegative') }}
+                </mat-error>
+              }
+              <!-- Error si se ingresan números negativos -->
+              @if (vacanteForm.get('salario').hasError('invalidSalary')) {
+                <mat-error>
+                  {{ vacanteForm.get('salario').getError('invalidSalary') }}
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <!-- FECHA DE CONTRATACIÓN -->
+          <div class="col-3">
+            <strong style="text-align: left; display: block;">Fecha de Contratación *</strong>
+            <mat-form-field class="w-100" appearance="outline">
+              <input matInput [matDatepicker]="picker" (keypress)="numericOnly($event)" formControlName="fechaContratacion"
+                placeholder="Selecciona la fecha">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+              @if (vacanteForm.get('fechaContratacion').hasError('required') && vacanteForm.get('fechaContratacion').touched) {
+                <div>
+                  <small class="text-danger">La fecha de contratación debe ser válida.</small>
+                </div>
+              }
+              @if (vacanteForm.get('fechaContratacion').hasError('fechaContratacionInvalida') && vacanteForm.get('fechaContratacion').touched) {
+                <div >
+                  <small class="text-danger">
+                    @if (!editMode) {
+                      <span>
+                        {{ vacanteForm.get('fechaContratacion').errors.fechaContratacionInvalida }}
+                      </span>
+                    }
+                    @if (editMode) {
+                      <span>
+                        La fecha de contratación caducó. Registra una nueva fecha.
+                      </span>
+                    }
+                  </small>
+                </div>
+              }
+            </div>
+            <div class="col-3">
+              <strong style="text-align: left; display: block;">Cantidad *</strong>
+              <mat-form-field class="w-100" appearance="outline">
+                <!-- Se eliminó 'type="number"' -->
+                <input matInput type="number" formControlName="cantidad" (keypress)="numericOnly($event)">
+                @if (vacanteForm.get('cantidad').hasError('required')) {
+                  <mat-error>
+                    Error. Ingresa una cantidad válida.
+                  </mat-error>
+                }
+                @if (vacanteForm.get('cantidad').hasError('cantidadInvalida')) {
+                  <mat-error>
+                    {{vacanteForm.get('cantidad').errors.cantidadInvalida}}
+                  </mat-error>
+                }
+                @if (vacanteForm.get('cantidad').hasError('min')) {
+                  <mat-error>
+                    La cantidad de vacantes no puede ser negativa.
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- Sexta row. Requerimientos; Años de experiencia similar y rango de edad -->
+          <h4 style="font-size: 18px; font-weight: bold; margin-top: 16px; text-align: left;">Requerimientos</h4>
+          <div class="row">
+            <div class="col-3">
+              <strong style="text-align: left; display: block;">Años de experiencia similar *</strong>
+              <mat-form-field class="w-100" appearance="outline">
+                <input matInput type="number" formControlName="aniosExperiencia" (keypress)="numericOnly($event)">
+                @if (vacanteForm.get('aniosExperiencia').hasError('experienciaInvalida')) {
+                  <mat-error>
+                    {{vacanteForm.get('aniosExperiencia').errors.experienciaInvalida}}
+                  </mat-error>
+                }
+                @if (vacanteForm.get('aniosExperiencia').hasError('experienciaInvalidLetter')) {
+                  <mat-error>
+                    {{vacanteForm.get('aniosExperiencia').errors.experienciaInvalidLetter}}
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div class="col-6 offset-1">
+              <div class="form-group d-block">
+                <strong for="rangoEdad" class="d-block mb-2" style="text-align: left; display: block;">Rango de edad *
+                </strong>
+                <div formArrayName="rangoEdad">
+                  @for (rango of rangoEdad.controls; track rango; let i = $index) {
+                    <div [formGroupName]="i" class="row">
+                      <div class="col-3">
+                        <div class="d-flex align-items-center">
+                          <span class="mb-3">DE </span>&nbsp;
+                          <mat-form-field class="w-100" appearance="outline">
+                            <input matInput formControlName="minimo" type="number" (keypress)="numericOnly($event)">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="d-flex align-items-center">
+                          <span class="mb-3">A </span>&nbsp;
+                          <mat-form-field class="w-100" appearance="outline">
+                            <input matInput formControlName="maximo" type="number" (keypress)="numericOnly($event)">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <!-- Mensajes de error -->
+                      @if (vacanteForm.get('rangoEdad').hasError('rangoEdadInvalidoMin')) {
+                        <div>
+                          <small class="text-danger">{{vacanteForm.get('rangoEdad').errors.rangoEdadInvalidoMin}}</small>
+                        </div>
+                      }
+                      @if (vacanteForm.get('rangoEdad').hasError('rangoEdadInvalidoMax')) {
+                        <div>
+                          <small class="text-danger">{{vacanteForm.get('rangoEdad').errors.rangoEdadInvalidoMax}}</small>
+                        </div>
+                      }
+                      @if (vacanteForm.get('rangoEdad').hasError('rangoEdadInvalido')) {
+                        <div>
+                          <small class="text-danger">{{vacanteForm.get('rangoEdad').errors.rangoEdadInvalido}}</small>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--Séptima row, para Estudios mínimos, idiomas y nivel de idioma-->
+          <div class="row">
+            <!-- Estudios mínimos -->
+            <div class="col-3">
+              <strong style="text-align: left; display: block;">Estudios mínimos </strong>
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-select formControlName="estudiosMinimos" placeholder="Selecciona una opción">
+                  @for (estudio of estudiosMinimos; track estudio) {
+                    <mat-option [value]="estudio">{{ estudio }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- Idiomas y Nivel -->
+            <div class="col-6">
+              <div formArrayName="idiomas">
+                @for (idiomaCtrl of idiomas.controls; track idiomaCtrl; let i = $index) {
+                  <div [formGroupName]="i" class="row">
+                    <div class="col-6">
+                      <strong style="text-align: left; display: block;">Idioma </strong>
+                      <mat-form-field class="w-100" appearance="outline">
+                        <mat-select formControlName="idioma" placeholder="Selecciona un idioma">
+                          @for (idioma of idiomasList; track idioma) {
+                            <mat-option [value]="idioma">{{ idioma }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                      <strong style="text-align: left; display: block;">Nivel </strong>
+                      <mat-form-field class="w-100" appearance="outline">
+                        <mat-select formControlName="nivel" placeholder="Selecciona un nivel">
+                          @for (niv of nivelesList; track niv) {
+                            <mat-option [value]="niv">{{ niv }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+          <!-- Botones -->
+          <mat-dialog-actions align="end" style="margin-top: 16px;">
+            <div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 16px;">
+              <button mat-flat-button color="warn" (click)="goBack()">Cancelar</button>
+              <button mat-flat-button color="primary" type="submit" [disabled]="!vacanteForm.valid"> Guardar </button>
+            </div>
+          </mat-dialog-actions>
+        </form>
+      }
+    </mat-card>
+  </div>
+
