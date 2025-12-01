@@ -1,4 +1,3 @@
-import { PosService } from '../services/pos.service';
 import { AuthService } from '../services/auth.service';
 import { ZonesService } from 'src/app/services/zones.service';
 import { Component, inject, OnInit } from '@angular/core';
@@ -49,7 +48,6 @@ export class DashboardComponent implements OnInit {
 
   constructor(private breakpointObserver: BreakpointObserver,
               private zonesSvc: ZonesService,
-              private posSvc:PosService,
               private credentialModuleSvc: CredentialModuleService,
               private spinner: NgxSpinnerService
             ) {
@@ -135,39 +133,67 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  loadRemote(zone_id: string, branch_id:string = 'all') {
-    if(zone_id !== undefined && zone_id !== null) {
-      this.getSucursales(zone_id);
-    }
+  // loadRemote(zone_id: string, branch_id:string = 'all') {
+  //   if(zone_id !== undefined && zone_id !== null) {
+  //     this.getSucursales(zone_id);
+  //   }
     
-    // this.loading = true;
-    this.spinner.show();
-    this.disableUpdate();
-    this.posSvc.getStatus(this.selectedZone._id, branch_id).subscribe(status => {
-      this.status = status as SDate[];
-      // this.loading = false;
-      this.spinner.hide();
-    });
-    this.posSvc.getStatusPM(this.selectedZone._id, branch_id).subscribe(statusPM => {
-      this.statusPM = statusPM as SDate[];
-      // this.loading = false;
-      this.spinner.hide();
-    });
+  //   // this.loading = true;
+  //   this.spinner.show();
+  //   this.disableUpdate();
+  //   this.posSvc.getStatus(this.selectedZone._id, branch_id).subscribe(status => {
+  //     this.status = status as SDate[];
+  //     // this.loading = false;
+  //     this.spinner.hide();
+  //   });
+  //   this.posSvc.getStatusPM(this.selectedZone._id, branch_id).subscribe(statusPM => {
+  //     this.statusPM = statusPM as SDate[];
+  //     // this.loading = false;
+  //     this.spinner.hide();
+  //   });
+  // }
+
+  // enableUpdate() {
+  //   this.update = setInterval(() => {
+  //     let suc_id = 'all';
+  //     if(this.selectedSuc !== 'all' && this.selectedSuc !== undefined) {
+  //       suc_id = this.selectedSuc._id;
+  //     };
+
+  //     this.posSvc.getStatus(this.selectedZone._id, suc_id).subscribe(status => {
+  //       this.status = status as SDate[];
+  //     });
+
+  //   }, 1000 * 60);
+  // }
+
+  loadRemote(zone_id: string, branch_id: string = 'all') {
+  if (zone_id) {
+    this.getSucursales(zone_id);
   }
 
-  enableUpdate() {
-    this.update = setInterval(() => {
-      let suc_id = 'all';
-      if(this.selectedSuc !== 'all' && this.selectedSuc !== undefined) {
-        suc_id = this.selectedSuc._id;
-      };
+  this.spinner.show();
+  this.disableUpdate();
+  this.spinner.hide();
 
-      this.posSvc.getStatus(this.selectedZone._id, suc_id).subscribe(status => {
-        this.status = status as SDate[];
-      });
+  // si necesitas limpiar valores:
+  this.status = [];
+  this.statusPM = [];
+}
 
-    }, 1000 * 60);
-  }
+enableUpdate() {
+  this.update = setInterval(() => {
+    // si seleccionas sucursal, pero ya no usas POS, solo deja la lógica necesaria
+    let suc_id = 'all';
+    if (this.selectedSuc !== 'all' && this.selectedSuc !== undefined) {
+      suc_id = this.selectedSuc._id;
+    }
+
+    // ya no consultas nada
+  }, 1000 * 60);
+}
+
+
 
   disableUpdate() {
     if(this.update !== null) {

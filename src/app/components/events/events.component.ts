@@ -147,32 +147,32 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   //Método para cancelar un evento
-  cancelEvent(id: string): void { 
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'Este evento será cancelado, pero seguirá existiendo en la base de datos.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, cancelar',
-      cancelButtonText: 'No, volver',
-      cancelButtonColor: 'red',
-      confirmButtonColor: '#3f51b5',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Llama al servicio para eliminar el evento
-        this.eventsService.cancelEvent(id, this.user._id).subscribe(
-          () => {
-            Swal.fire('Cancelado!', 'El evento ha sido cancelado con éxito.', 'success');
-            // Vuelve a cargar la lista de eventos después de la eliminación
-            this.loadEvents();
-          },
-          (error) => {
-            Swal.fire('Error!', 'Ocurrió un error al cancelar el evento.', 'error');
-          }
-        );
-      }
-    });
-  }
+  // cancelEvent(id: string): void { 
+  //   Swal.fire({
+  //     title: '¿Estás seguro?',
+  //     text: 'Este evento será cancelado, pero seguirá existiendo en la base de datos.',
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Sí, cancelar',
+  //     cancelButtonText: 'No, volver',
+  //     cancelButtonColor: 'red',
+  //     confirmButtonColor: '#3f51b5',
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       // Llama al servicio para eliminar el evento
+  //       this.eventsService.cancelEvent(id, this.user._id).subscribe(
+  //         () => {
+  //           Swal.fire('Cancelado!', 'El evento ha sido cancelado con éxito.', 'success');
+  //           // Vuelve a cargar la lista de eventos después de la eliminación
+  //           this.loadEvents();
+  //         },
+  //         (error) => {
+  //           Swal.fire('Error!', 'Ocurrió un error al cancelar el evento.', 'error');
+  //         }
+  //       );
+  //     }
+  //   });
+  // }
 
   //Método para ver detalles de una vacante
   viewDetails(event: any): void {
