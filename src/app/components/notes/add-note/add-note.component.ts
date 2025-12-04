@@ -18,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-note',
@@ -48,6 +49,8 @@ export class AddNoteComponent implements OnInit {
 
   editMode = false;
   isLoading = false;
+  public baseUrl = environment.url;
+
 
   constructor(
     private fb: FormBuilder,

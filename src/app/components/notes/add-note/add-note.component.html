@@ -68,7 +68,8 @@
 
           <div class="w-100 my-3 preview-container">
             @if (isImage(attached.filename)) {
-            <div class="preview-image" [style.backgroundImage]="'url(' + attached.url + ')'">
+            <div class="preview-image" [style.backgroundImage]="baseUrl + attached.url">
+            <img [src]="baseUrl + attached.url" class="img-fluid" style="max-width: 100px;" alt="File Preview">
             </div>
             } @else {
             <img [src]="getFileIcon(attached.filename)" class="img-fluid preview-icon" alt="File Preview">
