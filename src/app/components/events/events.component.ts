@@ -27,7 +27,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   user: any = null;
   events: any[] = [];
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['name', 'description', 'date', 'place', 'starttime', 'endtime', 'status', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'date', 'place', 'starttime', 'endtime', 'actions'];
   filtroTexto: string = '';
   selectedEvent: any = null;
   showForm: boolean = false;
