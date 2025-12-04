@@ -5,6 +5,7 @@ import { MomentModule } from "ngx-moment";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { SharedModule } from './shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from "./app-routing.module";
 
 // Componentes del proyecto
 import { AppComponent } from "./app.component";
@@ -53,6 +54,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { NotesComponent } from "./components/notes/notes.component";
+import { ReportsComponent } from "./components/reports/reports.component";
+import { AddNoteComponent } from "./components/notes/add-note/add-note.component";
+import { AddReportComponent } from "./components/reports/add-report/add-report.component";
 //import { MaterialTimePickerComponent } from "@candidosales/material-time-picker";
 
 
@@ -88,6 +93,7 @@ const COMPONENTS = [
         BrowserModule,
         BrowserAnimationsModule,
         SharedModule,
+        AppRoutingModule,
         RouterModule,
         MatDatepickerModule,
         MatNativeDateModule,

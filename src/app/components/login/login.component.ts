@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
 
   loginMethod() {
     forkJoin([
+      /*
       this.findZoneByUsername(this.loginForm.value.username).pipe(
         catchError((error) => {
           Swal.fire({
@@ -44,7 +45,7 @@ export class LoginComponent implements OnInit {
           });
           return of(null); // Return a fallback value or handle the error appropriately
         })
-      ),
+      ),*/
       this.findIdByUsername(this.loginForm.value.username).pipe(
         catchError((error) => {
           Swal.fire({
@@ -57,12 +58,13 @@ export class LoginComponent implements OnInit {
           return of(null); // Return a fallback value or handle the error appropriately
         })
       )
-    ]).subscribe(([zone, user]) => {
-      if (zone === null || user === null) {
+    ]).subscribe(( [user]) => {
+      if (user === null || !user) {
         return;
       }
-      this.dataOriginal.zona = zone.toString();
-      this.dataOriginal.user = user.toString();    
+      //this.dataOriginal.zona = zone.toString();
+      this.dataOriginal.user = JSON.stringify(user || {})   
+      console.log('USER', user) 
       this.isValidSession(this.dataOriginal.user).subscribe(async (valid: any) => {  
         this.authSvc.login(this.loginForm.value).subscribe(
           async (loginData: any) => {
@@ -78,13 +80,14 @@ export class LoginComponent implements OnInit {
               });
             }
             if (loginData.user !== null) {
+              sessionStorage.setItem('user', JSON.stringify(loginData.user));
               this.authSvc.setUser(loginData.user);
               localStorage.setItem('token', loginData.token);
               this.authSvc.verifyLoggedIn().subscribe(async (verifyData: any) => {
                 this.authSvc.setUser(verifyData.user);
                 try {
                   if (verifyData.user !== null) {
-                    let responseIdentity = await this.setIdentity(this.dataOriginal);
+                    //let responseIdentity = await this.setIdentity(this.dataOriginal);
                     Swal.fire({
                       title: "Correcto",
                       text: "Se ha iniciado sesión correctamente",

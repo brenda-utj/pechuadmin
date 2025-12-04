@@ -10,6 +10,8 @@ import { Title } from '@angular/platform-browser';
 import { UserService } from '../services/user.service';
 import Swal from 'sweetalert2';
 import { ModulosService } from '../services/modulos.service';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from '../components/login/login.component';
 
 export interface Options {
   heading?: string;
@@ -39,6 +41,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
               private router: Router,
               private route: ActivatedRoute,
               private titleService: Title,
+              public dialog: MatDialog,
               private userSvc: UserService) {}
 
   ngOnInit(): void {
@@ -48,6 +51,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
         this.runOnRouteChange();
       });
 
+      console.log('Get modules from layout')
     this.getModules();
     this.runOnRouteChange();
   }
@@ -65,6 +69,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
         .filter(module => module.active)
         .sort((a, b) => a.position - b.position);
 
+        
       // Procesar los módulos y submódulos para ajustarlos al formato requerido
       this.modules = this.modules.map(modulo => {
         // Establecer displayName usando el nombre o descripción
@@ -88,7 +93,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
         // Si necesitas manejar customClass u otras propiedades, puedes hacerlo aquí
         modulo.customClass = modulo.customClass || '';
-
+        debugger
         return modulo;
       });
     });
@@ -131,35 +136,38 @@ export class LayoutComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         const identity = localStorage.getItem('identity');
-        this.userSvc.closeIdentityAdm(identity).subscribe(
-          response => {
-            this.authSvc.setUser(null);
+        // this.userSvc.closeIdentityAdm(identity).subscribe(
+        //   response => {
+        //     this.authSvc.setUser(null);
+        //     localStorage.removeItem('token');
+        //     this.router.navigate(['/']);
+        //     location.reload();
+        //   },
+        //   error => {
+        //     console.error('Error en la solicitud:', error);
+        //   }
+        // );
+        this.authSvc.setUser(null);
             localStorage.removeItem('token');
-            this.router.navigate(['/']);
-            location.reload();
-          },
-          error => {
-            console.error('Error en la solicitud:', error);
-          }
-        );
+            localStorage.removeItem('identity');
+            //this.router.navigate(['/']);
+            //location.reload();
+            sessionStorage.removeItem('user')
+             this.router.navigate(['']);
+                      this.dialog.open(LoginComponent, {
+                        width: '550px',
+                        disableClose: true
+                      });
       }
     });
   }
 
   hasPermission(moduleName: string): boolean {
-    return this.user &&
-           this.user.credentials &&
-           this.user.credentials[moduleName] &&
-           this.user.credentials[moduleName].init &&
-           this.user.credentials[moduleName].init.init;
+    return moduleName === 'eventos';
   }
 
   hasPermissionSubmodule(moduleName: string, permissionName: string): boolean {
-    return this.user &&
-           this.user.credentials &&
-           this.user.credentials[moduleName] &&
-           this.user.credentials[moduleName].init &&
-           this.user.credentials[moduleName].init[permissionName];
+    return true;
   }
 
 }

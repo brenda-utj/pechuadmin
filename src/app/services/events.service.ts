@@ -10,11 +10,11 @@ import { Observable } from 'rxjs';
 export class EventsService {
   constructor(private http: HttpClient) { }
 
-  getEvents(month?: number, year?: number): Observable<any[]> {
-    let urlComplement = '';
+  getEvents(view = "list", month?: number, year?: number): Observable<any[]> {
+    let urlComplement =  `?view=${view}`;
   
     if (month) {
-      urlComplement += `?month=${month}`;
+      urlComplement += `&month=${month}`;
     }
   
     if (year) {
@@ -33,12 +33,12 @@ export class EventsService {
   }
   
   editEvent(id: string, eventData: any, userId: string): Observable<any> {  
-    return this.http.put(`${environment.url}/api/events/update/${id}/${userId}`, eventData);
+    return this.http.put(`${environment.url}/api/events/update/${id}`, eventData);
   }
   
   
   deleteEvent(id: string, userId: string): Observable<any> {
-    return this.http.delete(`${environment.url}/api/events/delete/${id}/${userId}`);
+    return this.http.delete(`${environment.url}/api/events/delete/${id}`);
   }
 
   loadData(): Observable<any[]> {

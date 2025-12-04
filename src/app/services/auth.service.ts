@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthService {
-  private userSubject = new BehaviorSubject<any>(null);
+  private userSubject = new BehaviorSubject<any>(JSON.parse(sessionStorage.getItem('user')) || null);
   user = this.userSubject.asObservable();
   constructor(private http: HttpClient) { }
   public getToken(): string {

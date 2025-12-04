@@ -15,6 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private authSvc: AuthService, private userSvc: UserService, private router: Router) { }
 
   ngOnInit(): void {
+    /*
     this.authSvc.verifyLoggedIn().subscribe((loginData: any) => {
 
       // Verifica si existe una sesión en localStorage
@@ -48,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
         location.reload();
       }
     });
+    */
   }
   
   ngOnDestroy(){

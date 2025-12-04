@@ -1,0 +1,42 @@
+<div class="container">
+
+  <mat-card *ngIf="note">
+    <mat-card-title>Nota</mat-card-title>
+    <mat-card-subtitle>
+      Fecha: {{ note.createdAt | date:'medium' }}
+    </mat-card-subtitle>
+
+    <mat-card-content>
+      <p class="content">{{ note.content }}</p>
+
+      <div class="attachments" *ngIf="note.attachments.length">
+        <h3>Archivos adjuntos</h3>
+
+        <div class="files">
+          <div 
+            class="file-card" 
+            *ngFor="let file of note.attachments"
+            (click)="openInNewTab(file.url)"
+          >
+            <img 
+            style="max-width: 100px;"
+              *ngIf="isImage(file.filename)"
+              [src]="baseUrl + file.url"
+              class="image-preview"
+            />
+            
+            <div class="file-info">
+              <mat-icon>attach_file</mat-icon>
+              <span>{{ file.filename }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button (click)="close()">Cerrar</button>
+    </mat-card-actions>
+  </mat-card>
+
+</div>

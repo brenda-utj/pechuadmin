@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  url: "http://localhost:3000", // LOCAL
+  url: "https://pechu-api.onrender.com", // LOCAL
+  //url: "http://localhost:3000", // LOCAL
+
   // url: "https://pechugon.corpocaste.com", // PRODUCCION NUEVA
   // url: "http://pechugon.corpocaste.com:3000", // PRODUCCION ANTERIOR
   googleMapApiKey: "AIzaSyB44e1kfekN0phzvD5wM1e9xYoi1cQs5Kk",

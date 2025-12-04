@@ -113,26 +113,31 @@ private async loadThreeAdjacentMonths(refDate: Date): Promise<void> {
     const responses = await Promise.all(
       dates.map(d =>
         this.eventService
-          .getEvents(d.getMonth() + 1, d.getFullYear())
+          .getEvents("calendar", d.getMonth() + 1, d.getFullYear())
           .toPromise()
       )
     );
 
     const mergedEvents = responses.reduce((acc, arr) => acc.concat(arr), [] as any[]);
 
+    console.log('MERGE EVENTS', mergedEvents)
+
     // Mapear eventos al formato que espera FullCalendar
     this.events = mergedEvents
-    .filter(ev => ev.status?.toLowerCase() === 'active')
-    .map(ev => ({
-      id: ev._id,
-      title: ev.name,
-      start: this.combineDateAndHour(ev, 'starttime'),
-      end: this.combineDateAndHour(ev, 'endtime'),
-      extendedProps: {
-        description: ev.description,
-        place: ev.place,
-      }
-    }));
+  .filter(ev => ev.activo === 1)
+  .map(ev => ({
+    id: ev._id,
+    title: ev.name,
+    start: this.combineDateAndHour(ev, 'startTime'),  // ← Cambiar a startTime
+    end: this.combineDateAndHour(ev, 'endTime'),      // ← Cambiar a endTime
+    extendedProps: {
+      description: ev.description,
+      place: ev.place,
+    }
+  }));
+
+    console.log('EVENTOS', this.events);
+
 
     // Actualizar calendario con todos los eventos juntos
     this.calendarOptions = {
@@ -192,21 +197,31 @@ private async loadThreeAdjacentMonths(refDate: Date): Promise<void> {
   }
 
   // Combinar fecha + hora del evento
-  private combineDateAndHour(event: any, timeKey: string = 'starttime'): string {
-    if (!event.date || !event[timeKey]) return new Date().toISOString();
-
-    const date = new Date(event.date);
-    const timeString = event[timeKey].trim();
-    const [hourMin, period] = timeString.split(' ');
-    let [hours, minutes] = hourMin.split(':').map(Number);
-
-    // Conversión a formato 24h
-    if (period?.toUpperCase() === 'PM' && hours < 12) hours += 12;
-    if (period?.toUpperCase() === 'AM' && hours === 12) hours = 0;
-
-    date.setHours(hours, minutes, 0, 0);
-    return date.toISOString();
+  private combineDateAndHour(event: any, timeKey: string = 'startTime'): string {
+  // Verifica ambas variantes (con mayúscula y minúscula)
+  const time = event[timeKey] || event[timeKey.toLowerCase()];
+  
+  if (!event.date || !time) {
+    console.warn(`Fecha u hora faltante para evento ${event._id}:`, { date: event.date, time });
+    return new Date().toISOString();
   }
+
+  const date = new Date(event.date);
+  const timeString = time.trim();
+  const [hourMin, period] = timeString.split(' ');
+  let [hours, minutes] = hourMin.split(':').map(Number);
+
+  // Tu lógica de conversión está bien, pero tus datos NO tienen AM/PM
+  // Solo tienen "09:00" en formato 24h
+  if (period) {
+    // Conversión a formato 24h solo si hay AM/PM
+    if (period.toUpperCase() === 'PM' && hours < 12) hours += 12;
+    if (period.toUpperCase() === 'AM' && hours === 12) hours = 0;
+  }
+
+  date.setHours(hours, minutes, 0, 0);
+  return date.toISOString();
+}
 
   //Helper para el manejo de fechas
   private getOffsetMonth(src: Date, offset: number): Date {

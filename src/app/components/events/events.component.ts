@@ -92,9 +92,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.eventsService.getEvents().pipe(takeUntil(this.destroy$)).subscribe(
       (events) => {
         // Filtrar según el rol o si es el usuario que lo agregó
-        const filteredEvents = events.filter(event =>
-          this.user?.role === 'super administrativo' || event.userAdd === this.user?._id
-        );
+        const filteredEvents = events;
 
         // Ordenar de más reciente a más antiguo
         const sortedEvents = filteredEvents.sort((a, b) => {

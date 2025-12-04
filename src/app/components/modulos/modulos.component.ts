@@ -40,6 +40,7 @@ export class ModulosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('HOLS 2')
     this.getModulos();
     this.getUser();
   }
@@ -66,6 +67,8 @@ export class ModulosComponent implements OnInit {
 
   getModulos() {
     this.moduloSvc.getModules().subscribe((res: ModuleInterface[]) => {
+    console.log('RES', res)
+
       this.modules = res;
       this.dataSource.data = this.modules;
       this.updateFilters();

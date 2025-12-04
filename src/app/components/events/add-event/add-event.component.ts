@@ -31,12 +31,12 @@ export class AddEventComponent implements OnInit {
 
   onStartTimeChange(event) {
     const timeString = `${event.hour}:${event.minute.toString().padStart(2, '0')} ${event.meriden}`;
-    this.eventForm.patchValue({ starttime: timeString });
+    this.eventForm.patchValue({ startTime: timeString });
   }
 
   onEndTimeChange(event) {
     const timeString = `${event.hour}:${event.minute.toString().padStart(2, '0')} ${event.meriden}`;
-    this.eventForm.patchValue({ endtime: timeString });
+    this.eventForm.patchValue({ endTime: timeString });
   }
 
 
@@ -98,8 +98,8 @@ export class AddEventComponent implements OnInit {
       name: [null, Validators.required],
       description: [null],
       date: [null, [Validators.required, eventDate()]],
-      starttime: [null, Validators.required],
-      endtime: [null, Validators.required],
+      startTime: [null, Validators.required],
+      endTime: [null, Validators.required],
       place: [null, Validators.required],
       address: ['', Validators.required],
       location: this.fb.group({
@@ -122,16 +122,16 @@ export class AddEventComponent implements OnInit {
       name: event.name || '',
       description: event.description || '',
       date: event.date || '',
-      starttime: event.starttime || '',
-      endtime: event.endtime || '',
+      startTime: event.startTime || '',
+      endTime: event.endTime || '',
       place: event.place || '',
       address: event.address || '',
       emails: [],
     });
 
    // Convertir y asignar al timepicker de inicio
-  if (event.starttime) {
-    const match = event.starttime.match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
+  if (event.startTime) {
+    const match = event.startTime.match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
     if (match) {
       this.exportTime = {
         hour: parseInt(match[1], 10),
@@ -143,8 +143,8 @@ export class AddEventComponent implements OnInit {
   }
 
   // Convertir y asignar al timepicker de fin
-  if (event.endtime) {
-    const match = event.endtime.match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
+  if (event.endTime) {
+    const match = event.endTime.match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
     if (match) {
       this.exportEndTime = {
         hour: parseInt(match[1], 10),
@@ -269,8 +269,8 @@ export class AddEventComponent implements OnInit {
       formData.append('name', formValues.name || '');
       formData.append('description', formValues.description || '');
       formData.append('date', formValues.date || '');
-      formData.append('starttime', formValues.starttime || '');
-      formData.append('endtime', formValues.endtime || '');
+      formData.append('startTime', formValues.startTime || '');
+      formData.append('endTime', formValues.endTime || '');
       formData.append('place', formValues.place || '');
       formData.append('address', formValues.address || '');
 

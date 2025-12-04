@@ -1,0 +1,100 @@
+<div style="text-align: right;">
+  <button mat-flat-button color="primary" (click)="navigateToAddNote()">
+    + Agregar nota
+  </button>
+</div>
+
+<br>
+
+<mat-card appearance="outlined" style="text-align: center;">
+  <mat-card-content>
+
+    <!-- SEARCH BAR -->
+    <div class="div-search">
+      <mat-form-field class="filter-search" appearance="outline">
+        <mat-icon matPrefix>search</mat-icon>
+        <input 
+          matInput
+          placeholder="Buscar en contenido..."
+          [(ngModel)]="filtroTexto"
+          (input)="applyFilter()" />
+      </mat-form-field>
+    </div>
+
+    @if (dataSource && dataSource.filteredData && dataSource.filteredData.length) {
+
+      <div class="mat-elevation-z8" style="text-align-last: center">
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table">
+
+          <!-- CONTENT -->
+          <ng-container matColumnDef="content">
+            <th mat-header-cell *matHeaderCellDef>Contenido</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.content }}
+            </td>
+          </ng-container>
+
+          <!-- EVENT -->
+          <ng-container matColumnDef="eventId">
+            <th mat-header-cell *matHeaderCellDef>Evento</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.eventId?.name || element.eventId }}
+            </td>
+          </ng-container>
+
+          <!-- CREATED AT -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdAt | date:'dd/MM/yyyy hh:mm a' }}
+            </td>
+          </ng-container>
+
+          <!-- ACTIONS -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="mat-column-actions">
+              Acciones
+            </th>
+            <td mat-cell *matCellDef="let element" class="mat-column-actions">
+
+              <!-- VIEW -->
+              <button mat-icon-button (click)="viewDetails(element)" matTooltip="Ver nota">
+                <mat-icon class="pointer custom-blue">visibility</mat-icon>
+              </button>
+
+              <!-- EDIT -->
+              <button mat-icon-button (click)="navigateToEditNote(element._id)" matTooltip="Editar">
+                <mat-icon class="pointer black-icon">edit</mat-icon>
+              </button>
+
+              <!-- DELETE -->
+              <button mat-icon-button (click)="deleteNote(element._id)" matTooltip="Eliminar">
+                <mat-icon color="warn" class="pointer">delete</mat-icon>
+              </button>
+
+            </td>
+          </ng-container>
+
+          <!-- TABLE ROWS -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <!-- <mat-paginator
+          #paginator
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          showFirstLastButtons>
+        </mat-paginator> -->
+
+      </div>
+
+    } @else {
+      <div class="w-100">
+        <strong>No hay notas registradas...</strong>
+      </div>
+    }
+
+  </mat-card-content>
+</mat-card>

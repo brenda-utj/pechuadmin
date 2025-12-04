@@ -1,0 +1,146 @@
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+  <div style="display:flex;align-items:center;">
+    <button mat-icon-button (click)="goBack()" style="color:black;">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span style="color:black;font-size:16px;margin-left:4px;">Atrás</span>
+  </div>
+
+  <h3 mat-dialog-title style="margin:0;position:absolute;left:50%;transform:translateX(-50%);">
+    {{ editMode ? 'Editar Reporte' : 'Agregar Reporte' }}
+  </h3>
+</div>
+
+<div class="container" [ngClass]="{'overflow' : editMode}">
+  <mat-card style="padding:20px;" appearance="outlined">
+    @if (reportForm) {
+    <form [formGroup]="reportForm" (ngSubmit)="saveReport()">
+
+      <div class="row mb-3">
+        <div class="col-12">
+          <h3><strong>Detalles de Reporte</strong></h3>
+        </div>
+      </div>
+
+      <!-- Contenido -->
+      <div class="row">
+        <div class="col-4">
+          <strong>Selecciona evento *</strong>
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-select formControlName="eventId" placeholder="Eventos disponibles">
+
+              @for (ev of events; track ev._id) {
+              <mat-option [value]="ev._id">{{ ev.name }}</mat-option>
+              }
+
+            </mat-select>
+
+            @if (reportForm.get('eventId')?.hasError('required')) {
+            <mat-error>Debes seleccionar un evento</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <strong>Contenido</strong>
+          <mat-form-field class="w-100" appearance="outline">
+            <textarea matInput matTextareaAutosize matAutosizeMinRows="4" matAutosizeMaxRows="12"
+              formControlName="content" placeholder="Escribe tu Reporte aquí...">
+            </textarea>
+
+            @if (reportForm.get('content')?.hasError('required')) {
+            <mat-error>El contenido es requerido</mat-error>
+            }
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <!-- Attachments existentes -->
+      <div class="row my-4">
+        @for (attached of reportForm.get('attachments').value; track attached; let i = $index) {
+        <div class="col-2 attached-card m-2">
+
+          <div class="w-100 text-truncate" [title]="attached.filename">
+            {{ attached.filename }}
+          </div>
+
+          <div class="w-100 my-3 preview-container">
+            @if (isImage(attached.filename)) {
+            <div class="preview-image" [style.backgroundImage]="'url(' + attached.url + ')'">
+            </div>
+            } @else {
+            <img [src]="getFileIcon(attached.filename)" class="img-fluid preview-icon" alt="File Preview">
+            }
+          </div>
+
+          <div class="w-100 text-center">
+            <button type="button" mat-raised-button color="warn" (click)="removeAttachment(i)">Eliminar</button>
+          </div>
+
+        </div>
+        }
+      </div>
+
+      <!-- Nuevos archivos -->
+      <div formArrayName="files" class="row">
+        @for (file of files.controls; track file; let i = $index) {
+        <div class="col-3 mb-3">
+          <div class="doc gray">
+            <div class="w-100">Archivo nuevo:</div>
+
+            @if (file.value) {
+            <div>
+              <label class="custom-file-upload">
+                {{ file.value.name }}
+              </label>
+              <br><br>
+              <button mat-raised-button color="warn" (click)="removeFile(i)">Eliminar</button>
+            </div>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- Botón agregar archivo -->
+        <div class="doc size19 gray">
+          <div class="w-100">Adjuntar archivo:</div>
+
+          <div class="w-100">
+            <label for="file-upload" class="custom-file-upload">
+              <img src="./assets/img/add-image.png" alt="Agregar archivo">
+            </label>
+
+            <input id="file-upload" type="file" (change)="addFile($event.target.files[0])"
+              accept=".jpeg,.jpg,.png,.pdf,.doc,.docx,.xls,.xlsx" style="display:none;" />
+
+            <div class="centered-message" *ngIf="!files.length">
+              No se eligió ningún archivo
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <mat-dialog-actions align="end" style="margin-top:16px;margin-bottom:15px;">
+        <div style="display:flex;justify-content:flex-end;gap:16px;">
+          <button mat-flat-button color="warn" type="button" (click)="goBack()">Cancelar</button>
+
+          <button mat-flat-button color="primary" type="submit" [disabled]="!reportForm.valid || isLoading">
+
+            @if (isLoading) {
+            <span class="spinner-container mr-5">
+              <mat-spinner mode="indeterminate" [diameter]="20"></mat-spinner>
+            </span>
+            }
+
+            {{ isLoading ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </mat-dialog-actions>
+
+    </form>
+    }
+  </mat-card>
+</div>
